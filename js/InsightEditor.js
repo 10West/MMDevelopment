@@ -2433,59 +2433,7 @@ function showContextMenu(node, e) {
 						graph.cellEditor.startEditing(cell)
 					}, 20);
 				}
-			}, '-', {
-				text: getText("Create Agent Population"),
-				glyph: 0xf0c0,
-				handler: function() {
-					graph.model.beginUpdate();
-					var pt = graph.getPointForEvent(e);
-					var cell = createPrimitive(getText("Agent Population"), "Agents", [pt.x, pt.y], [170, 80]);
-					graph.model.endUpdate();
-					if (folder) {
-						setParent(cell, selectedItems[0]);
-					}
-					setSelected(cell);
-
-					setTimeout(function() {
-						graph.cellEditor.startEditing(cell)
-					}, 20);
-				}
-			}, {
-				text: getText("Create State"),
-				glyph: 0xf046,
-				handler: function() {
-					graph.model.beginUpdate();
-					var pt = graph.getPointForEvent(e);
-					var cell = createPrimitive(getText("New State"), "State", [pt.x, pt.y], [100, 40]);
-					graph.model.endUpdate();
-					if (folder) {
-						setParent(cell, selectedItems[0]);
-					}
-					setSelected(cell);
-
-					setTimeout(function() {
-						graph.cellEditor.startEditing(cell)
-					}, 20);
-
-				}
-			}, {
-				text: getText("Create Action"),
-				glyph: 0xf0e7,
-				handler: function() {
-					graph.model.beginUpdate();
-					var pt = graph.getPointForEvent(e);
-					var cell = createPrimitive(getText("New Action"), "Action", [pt.x, pt.y], [120, 50]);
-					graph.model.endUpdate();
-					if (folder) {
-						setParent(cell, selectedItems[0]);
-					}
-					setSelected(cell);
-
-					setTimeout(function() {
-						graph.cellEditor.startEditing(cell)
-					}, 20);
-				}
-			}, , '-', {
+			}, '-',  {
 				text: getText("Create Text"),
 				glyph: 0xf035,
 				handler: function() {

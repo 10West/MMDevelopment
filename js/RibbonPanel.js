@@ -1137,43 +1137,6 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 								graph.orderCells(false);
 							}
 						}, '-', {
-							xtype: "component",
-							indent: false,
-							html: "<b>" + getText('Agent Based Modeling') + "</b>",
-							disabled: true,
-							style: {
-								"margin": "10px 5px 10px 5px"
-							}
-						}, '-', {
-							itemId: 'population',
-							glyph: 0xf0c0,
-							text: getText('Add Agent Population'),
-							tooltip: getText('Agent populations are a collection of agents'),
-							handler: function() {
-								highlight(createPrimitive("Agent Population", "Agents", [240, 80], [170, 80]))
-
-								graph.orderCells(false);
-							}
-						}, {
-							itemId: 'state',
-							glyph: 0xf046,
-							text: getText('Add State'),
-							tooltip: getText('States are binary, true/false variables'),
-							handler: function() {
-								highlight(createPrimitive("New State", "State", [240, 80], [100, 40]))
-							}
-						}, {
-							itemId: 'action',
-							glyph: 0xf0e7,
-							text: getText('Add Action'),
-							tooltip: getText('Actions can trigger a change in the model state'),
-							handler: function() {
-								highlight(createPrimitive("New Action", "Action", [240, 80], [120, 50]))
-
-								graph.orderCells(false);
-							}
-						},
-						'-', {
 
 							xtype: "component",
 							indent: false,
