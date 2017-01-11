@@ -1403,7 +1403,7 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 					hidden: !viewConfig.actionsGroup
 				}, 
 				{
-					hidden: (!viewConfig.styleGroup),
+					hidden: (!viewConfig.shareGroup),
 					text: getText('Share'),
 					itemId: 'share',
 					menu: [{
@@ -1596,7 +1596,7 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 					handler: function(menu) {},
 					menu: zoomMenu
 				}, {
-					hidden: is_ebook,
+					hidden: true,
 					cls: 'button',
 					/*glyph: 0xf015,*/
 					iconCls: 'icon-icon',
