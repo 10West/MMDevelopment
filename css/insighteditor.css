@@ -34,7 +34,7 @@
 	margin-top: 5px;
 	margin-bottom: 5px;
 	}
-	
+
 .sidebar_description ol {
 	list-style: decimal outside none;
 	margin-left:  25px;
@@ -44,7 +44,7 @@
 
 .sidebar_description p {
 	margin-bottom: .5em;
-	
+
 }
 
 .green-icon  {
@@ -197,7 +197,7 @@ div.mxRubberband {
 	-webkit-transform: perspective( 1000px ) rotate( 6deg ) rotateX( 10deg );
 	-moz-transform: perspective( 1000px ) rotate( 6deg ) rotateX( 10deg );
 	transform: perspective( 1000px ) rotate( 6deg ) rotateX( 10deg );
-	
+
 }
 
 #model-description  ul {
@@ -206,7 +206,7 @@ div.mxRubberband {
 	margin-top: 5px;
 	margin-bottom: 5px;
 	}
-	
+
 #model-description   ol {
 	list-style: decimal outside none;
 	margin-left:  25px;
@@ -216,7 +216,7 @@ div.mxRubberband {
 
 #model-description   p {
 	margin-bottom: 0.5em;
-	
+
 }
 
 #model-title {
@@ -226,7 +226,7 @@ div.mxRubberband {
 	border-bottom: 2px solid grey;
 	margin-bottom:  1em;
 	font: small-caps bold x-large Georgia, Times, serif;
-	
+
 }
 
 #model-description {
@@ -235,7 +235,7 @@ div.mxRubberband {
 	text-indent: 1em;
 	hyphens: auto;
 	font: 14px "Lucida Grande", Lucida, Verdana, sans-serif;
-	
+
 }
 
 .model-image {
@@ -259,7 +259,7 @@ div.mxRubberband {
   height:   100%;
   z-index:  20000;
   background-color: #FFFcF7  ;
-  
+
 }
 
 #loading {
@@ -284,12 +284,12 @@ div.mxRubberband {
 
 .x-props-grid .x-grid3-cell-inner{
 	font-size: 14px;
-	
+
 }
 
 .undefined td{
 	font-size: small;
-	
+
 }
 
 .help-icon {
@@ -312,7 +312,7 @@ div.mxRubberband {
 }
 .edit-small-icon {
 	background:transparent url(../images/edit.png) no-repeat 0 0;
-    cursor:pointer; 
+    cursor:pointer;
 }
 .flow-small-icon {
     background-image:url(../images/flow_small.png) !important;
@@ -639,7 +639,7 @@ bottom: 0;
 right: 0;
 }
 .logo-icon {
-    background-image: url(http://insightmaker.com/builder/images/logo.png);
+    background-image: url(../images/logo.png);
 
 	background-size: 154px 32px;
 }
@@ -663,7 +663,7 @@ right: 0;
        -moz-border-radius: 2px;
             border-radius: 2px;
 			padding:3px;
-	
+
 }
 
 .x-tip-body ul li {
