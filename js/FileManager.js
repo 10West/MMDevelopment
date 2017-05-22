@@ -15,7 +15,7 @@ function setTitle(filename) {
 	var title;
 	if(filename) {
 		title = filename+"| Insight Maker";
-		
+
 	} else {
 		title = "Insight Maker";
 	}
@@ -26,7 +26,16 @@ function setTitle(filename) {
 function getModelXML2() {
 	var enc = new mxCodec();
 	var graph_dom=enc.encode(graph.getModel());
-	var xml_data="<InsightMakerModel>"+graph_dom.innerHTML+"</InsightMakerModel>";
+	var graph_dom_xml=graph_dom.innerHTML;
+
+	var resultsSet = '<resultsset results-csv-data="'+exportResultsCSV()+'"/>';
+
+	var rootIdx = graph_dom_xml.lastIndexOf("</root>");
+	if (rootIdx > -1) {
+  		var graph_dom_xml = graph_dom_xml.substr(0, rootIdx) + resultsSet + graph_dom_xml.substr(rootIdx);
+  	}
+
+	var xml_data="<InsightMakerModel>"+graph_dom_xml+"</InsightMakerModel>";
 	return xml_data;
 }
 
@@ -39,12 +48,12 @@ function newModel() {
 var FileManagerWeb = new function() {
 	var self = this;
 	var filename = null;
-	
+
 	this.set_filename = function(filename) {
 		self.filename=filename;
 		setTitle(filename);
 	}
-	
+
 	this.saveModel = function() {
 		Ext.MessageBox.prompt('Model name', 'Enter name of model', function(btn, model_name){
 			if(btn=='cancel') {
@@ -59,7 +68,7 @@ var FileManagerWeb = new function() {
 		});
 
 	};
-	
+
 	this.loadModel = function() {
 		openFile({
 			read: "text",
@@ -71,7 +80,7 @@ var FileManagerWeb = new function() {
 			}
 		});
 	};
-	
+
 	this.newModel = function() {
 		self.set_filename(null);
 		newModel();
@@ -90,14 +99,14 @@ menu: [
 		tooltip: getText('New model'),
 		handler: FileManagerWeb.newModel,
 		scope: this
-	}, 
+	},
 	{
 		glyph: 0xf115, /*0xf115 alternative icon we could have used */
 		text: getText('Load'),
 		tooltip: getText('Load model'),
 		handler: FileManagerWeb.loadModel,
 		scope: this
-	}, 
+	},
 	{
 		glyph: 0xf0c7,
 		text: getText('Save'),

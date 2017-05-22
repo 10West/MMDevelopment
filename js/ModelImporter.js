@@ -42,7 +42,7 @@ function showInsertModelWindow(pt) {
 						var model = dec.decode(doc.documentElement);
 
 						var cells = model.cells;
-						
+
 
 						graph.getModel().beginUpdate();
 
@@ -61,7 +61,7 @@ function showInsertModelWindow(pt) {
 						graph.getEdgeValidationError = getEdgeValidationError;
 
 
-						
+
 						setImage(folder, "Plugin");
 						setNote(folder, description);
 
@@ -98,6 +98,7 @@ function showInsertModelWindow(pt) {
 function importMXGraph(txt) {
 	graph_source_data = txt.replace(/InsightMakerModel/g, "mxGraphModel");
 	var doc = mxUtils.parseXml(graph_source_data);
+	$(doc).find('resultsset').remove();
 	var dec = new mxCodec(doc);
 	dec.decode(doc.documentElement, graph.getModel());
 	clearPrimitiveCache();
@@ -222,7 +223,7 @@ function importXMILE() {
 		read: "text",
 		multiple: true,
 		onCompleted: function(result) {
-			
+
 			 var importProgress = Ext.MessageBox.show({msg:getText("Importing XMILE model...<br/><br/>This may take a few minutes."),icon:'run-icon',width:300, closable:false, modal:true});
 
 			function xStr(str) {
@@ -302,13 +303,13 @@ function importXMILE() {
 			}
 
 			setTimeout(function(){
-				
-				
+
+
 				try{
 					var x2js = new X2JS();
 					var n;
 					try{
-					
+
 						var res = result.map(function(x) {
 							n = x.name;
 							var json = x2js.xml_str2json(x.contents);
@@ -322,7 +323,7 @@ function importXMILE() {
 						importProgress.close();
 						return;
 					}
-			
+
 					if(isLocal()){
 						console.log("Import Objects:");
 						console.log(res);
@@ -371,8 +372,8 @@ function importXMILE() {
 								a.array = a.flow;
 							}
 						});
-						
-				
+
+
 
 
 						arrify(x.model.aux).forEach(function(a) {
@@ -385,7 +386,7 @@ function importXMILE() {
 							}
 						});
 
-				
+
 						arrify(x.model.stock).forEach(function(a) {
 							var stock = createPrimitive(xStr(a._name), "Stock", [a.display._x * scale, a.display._y * scale], [100, 40]);
 							setValue(stock, makeEq(a));
@@ -410,8 +411,8 @@ function importXMILE() {
 								})
 							}
 						});
-				
-						
+
+
 						arrify(x.model.flow).forEach(function(a) {
 							var flow = createConnector(xStr(a._name), "Flow", findAlpha(a._name), findOmega(a._name));
 
@@ -429,26 +430,26 @@ function importXMILE() {
 
 
 						if (x.model.display) {
-						
+
 							arrify(x.model.display.text_box).forEach(function(a){
-							
+
 								if(a.__text){
 									var text = createPrimitive(a.__text, "Text", [a._x * scale, a._y * scale], [a._width * scale, a._height * scale]);
-								
+
 									graph.toggleCellStyleFlags(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_UNDERLINE, [text]);
-								
+
 									if(a["_font-size"]){
 										graph.setCellStyles(mxConstants.STYLE_FONTSIZE, a["_font-size"], [text]);
 									}
 									if(a["_font-family"]){
 										graph.setCellStyles(mxConstants.STYLE_FONTFAMILY, a["_font-family"], [text]);
 									}
-								
+
 
 									primitives[a._uid] = text;
 								}
 							});
-						
+
 							arrify(x.model.display.alias).forEach(function(a) {
 
 								var orig = primitives[xStr(a.of)];
@@ -467,81 +468,81 @@ function importXMILE() {
 							arrify(x.model.display.connector).forEach(function(a) {
 								var link = createConnector("Link", "Link", getPrimitive(a.from), getPrimitive(a.to));
 							});
-							
-							
+
+
 						}
-							
-							
-						
+
+
+
 						if(x.model["interface"]){
-							
+
 							var findItems = function(a){
 								a.sort(function(v1, v2){
 									return v1._index - v2._index;
 								});
-								
+
 								a = a.filter(function(item){
 									return (! item._type) || (item._type=="variable");
 								});
-								
+
 								var prims =  a.map(function(item){
-									
+
 									var prim = getPrimitive(item.entity._name);
-									
+
 									if(prim.indexOf){
 										return prim[0]; // XXX FIXME; is this really necessary? maybe just add all when there is a match
 									}else{
 										return prim;
 									}
 								});
-								
+
 								return prims.join(",");
 							};
-							
+
 							arrify(x.model["interface"].stacked_container).forEach(function(a){
-								
+
 								arrify(a.table).forEach(function(table){
-									
+
 									var d  = graph.insertVertex(graph.getDefaultParent(), null, primitiveBank.display.cloneNode(true), 10, 10, 64, 64, "display");
 									d.visible = false;
-								
+
 									graph.getModel().execute(new mxCellAttributeChange(d, "name", table._title || "Table"));
 									graph.getModel().execute(new mxCellAttributeChange(d, "AutoAddPrimitives", "false"));
-									
+
 									graph.getModel().execute(new mxCellAttributeChange(d, "Type", "Tabular"));
-									
+
 									graph.getModel().execute(new mxCellAttributeChange(d, "Primitives", findItems(arrify(table.item))));
-									
+
 								});
-								
+
 								arrify(a.graph).forEach(function(chart){
 									if(chart._type == "time_series" || chart._type == "scatterplot"){
-										
+
 										var d = graph.insertVertex(graph.getDefaultParent(), null, primitiveBank.display.cloneNode(true), 10, 10, 64, 64, "display");
 										d.visible = false;
-										
+
 										graph.getModel().execute(new mxCellAttributeChange(d, "name", chart._title || "Chart"));
 										graph.getModel().execute(new mxCellAttributeChange(d, "AutoAddPrimitives", "false"));
-											
+
 										if(chart._type == "time_series"){
 											graph.getModel().execute(new mxCellAttributeChange(d, "Type", "Time Series"));
 											graph.getModel().execute(new mxCellAttributeChange(d, "xAxis", "Time (%u)"));
 										}
-										
+
 										if(chart._type == "scatterplot"){
 											graph.getModel().execute(new mxCellAttributeChange(d, "Type", "Scatterplot"));
 											graph.getModel().execute(new mxCellAttributeChange(d, "xAxis", "%o"));
 										}
-										
-										
+
+
 										graph.getModel().execute(new mxCellAttributeChange(d, "yAxis", "%o"));
-										
+
 										graph.getModel().execute(new mxCellAttributeChange(d, "Primitives", findItems(arrify(chart.plot))));
 									}
 								});
 							});
 						}
-						
+
 						if (x.model.group) {
 							arrify(x.model.group).forEach(function(a) {
 								var toAdd = arrify(a.entity).map(function(entity) {
@@ -563,9 +564,9 @@ function importXMILE() {
 								primitives[a._name] = group;
 							})
 						}
-						
-							
-						
+
+
+
 
 						var group = graph.groupCells(null, 50, Object.keys(primitives).map(function(k) {
 							return primitives[k]
@@ -589,19 +590,19 @@ function importXMILE() {
 					}
 
 					setMacros((getMacros() || "") + "\n\n" + macros);
-			
-				
+
+
 					showNotification("XMILE import completed successfully. Some equations may require manual adjustment in order to work with Insight Maker.", "notice");
 				}catch(err){
-					
+
 					showNotification("XMILE model could not be imported. Please ensure you have selected valid XMILE files.");
-					
+
 					if(isLocal()){
 						console.log(err);
 						throw(err);
 					}
 				}finally {
-					importProgress.close();	
+					importProgress.close();
 				}
 			}, 15);
 
