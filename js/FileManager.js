@@ -62,6 +62,7 @@ var FileManagerWeb = new function() {
 			if (btn == 'ok'){
 				var xml_data = getModelXML2();
 				model_name=appendFileExtension(model_name,InsightMakerFileExtension);
+
 				self.set_filename(model_name);
 				downloadFile(model_name,xml_data);
 			}
@@ -87,6 +88,34 @@ var FileManagerWeb = new function() {
 	}
 };
 
+// File upload button
+var fileUploadForm = new Ext.form.Panel({
+    items: [{
+        xtype: 'filefield',
+        name: 'upload',
+        allowBlank: false,
+		buttonOnly: true,
+		hideLabel: true,
+		buttonText: getText('Load'),
+		tooltip: getText('Load model'),
+		glyph: 0xf115,
+        listeners: {
+        	'change': function(fileInput) {
+        		openFile({
+					read: "text",
+					multiple: false,
+					accept: InsightMakerFileExtension,
+					onCompleted: function(model) {
+						importMXGraph(model.contents);
+						FileManagerWeb.set_filename(model.name);
+					}
+				}, $(fileInput.el.dom).find('input[type="file"]').get(0));
+        	}
+        }
+    }]
+});
+
+
 // FileMenu for environment.WebOffline
 var FileMenuWeb = {
 text: getText('File'),
@@ -100,13 +129,14 @@ menu: [
 		handler: FileManagerWeb.newModel,
 		scope: this
 	},
-	{
-		glyph: 0xf115, /*0xf115 alternative icon we could have used */
-		text: getText('Load'),
-		tooltip: getText('Load model'),
-		handler: FileManagerWeb.loadModel,
-		scope: this
-	},
+	// {
+	// 	glyph: 0xf115, /*0xf115 alternative icon we could have used */
+	// 	text: getText('Load'),
+	// 	tooltip: getText('Load model'),
+	// 	handler: FileManagerWeb.loadModel,
+	// 	scope: this
+	// },
+	fileUploadForm,
 	{
 		glyph: 0xf0c7,
 		text: getText('Save'),
