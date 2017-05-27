@@ -3,114 +3,102 @@
 <html>
 <head>
 
-  <title>Insight Maker</title>
+  	<title>Insight Maker</title>
 
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 	<meta http-equiv="X-UA-Compatible" content="chrome=IE8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <!--[if lte IE 8]>
+	<!--[if lte IE 8]>
+		<script type="text/javascript"
+			src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">
+		</script>
+		<style>
+		 /*
+		  CSS rules to use for styling the overlay:
+		    .chromeFrameOverlayContent
+		    .chromeFrameOverlayContent iframe
+		    .chromeFrameOverlayCloseBar
+		    .chromeFrameOverlayUnderlay
+		 */
+		</style>
+		<script type="text/javascript" >
+			alert("You are using an old version of Internet Explorer that does not support Insight Maker.\n\nTo run Insight Maker either:\n\n* Update your copy of Internet Explorer to version 9 or newer.\n* Use a different web browser (we recommend Google Chrome).\n* Install the Chrome Frame browser plug-in for Internet Explorer (you will be prompted to do this after closing this message).\n\nEither of these three options will allow you to run Insight Maker.");
 
-  <script type="text/javascript"
-     src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">
-
-    </script>
-
-    <style>
-     /*
-      CSS rules to use for styling the overlay:
-        .chromeFrameOverlayContent
-        .chromeFrameOverlayContent iframe
-        .chromeFrameOverlayCloseBar
-        .chromeFrameOverlayUnderlay
-     */
-    </style>
-
-  <script type="text/javascript" >
-
-  alert("You are using an old version of Internet Explorer that does not support Insight Maker.\n\nTo run Insight Maker either:\n\n* Update your copy of Internet Explorer to version 9 or newer.\n* Use a different web browser (we recommend Google Chrome).\n* Install the Chrome Frame browser plug-in for Internet Explorer (you will be prompted to do this after closing this message).\n\nEither of these three options will allow you to run Insight Maker.");
-
-	 window.attachEvent("onload", function() {
-	        CFInstall.check({
-	          mode: "inline", // the default
-	          node: "prompt"
-	        });
-	      });
-
-    </script>
+			window.attachEvent("onload", function() {
+			    CFInstall.check({
+			        mode: "inline", // the default
+			        node: "prompt"
+			    });
+			});
+	    </script>
 	<![endif]-->
 
 	<link rel="stylesheet" type="text/css" href="./css/jquery.toastmessage.css" />
- <link href="./css/font-awesome.css" rel="stylesheet">
- <link rel="stylesheet" type="text/css" href="./resources/framewarp/framewarp.css" />
+	<link href="./css/font-awesome.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="./resources/framewarp/framewarp.css" />
 
- 	<link rel="stylesheet" type="text/css" href="./resources/ext/packages/ext-theme-crisp-touch/build/resources/ext-theme-crisp-touch-all.css" />
- <link rel="stylesheet" type="text/css" href="./resources/ext/packages/sencha-charts/build/crisp/resources/sencha-charts-all.css" />
- <link rel="stylesheet" type="text/css" href="./resources/ext/packages/ext-ux/build/crisp/resources/ext-ux-all.css" />
-
+	<link rel="stylesheet" type="text/css" href="./resources/ext/packages/ext-theme-crisp-touch/build/resources/ext-theme-crisp-touch-all.css" />
+	<link rel="stylesheet" type="text/css" href="./resources/ext/packages/sencha-charts/build/crisp/resources/sencha-charts-all.css" />
+	<link rel="stylesheet" type="text/css" href="./resources/ext/packages/ext-ux/build/crisp/resources/ext-ux-all.css" />
 
 	<link rel="stylesheet" type="text/css" href="./css/insighteditor.css" />
-
-
+	<link rel="stylesheet" type="text/css" href="./css/modelmaker.css" />
 
 </head>
 <body onbeforeunload="return confirmClose();">
 
-
-<div id="loading-mask"></div>
-<div id="loading">
-    <div id="loading-indicator">
-      Loading Insight Maker...
-  		<p><br/>
-  			<img src="./images/loading.gif" height="15"/>
-		</p><br/>
-  	(This may take a few moments)
+	<div id="loading-mask"></div>
+	<div id="loading">
+	    <div id="loading-indicator">
+	      	Loading Insight Maker...
+	  		<p><br/>
+	  			<img src="./images/loading.gif" height="15"/>
+			</p><br/>
+	  		(This may take a few moments)
+		</div>
 	</div>
-</div>
-<div id="toplinks-holder" name="toplinks-holder"></div>
+	<div id="toplinks-holder" name="toplinks-holder"></div>
 
-<script type="text/javascript" src="./resources/ext/ext-all.js"></script>
+	<script type="text/javascript" src="./resources/ext/ext-all.js"></script>
 
-<script type="text/javascript" src="./resources/ext/packages/sencha-charts/build/sencha-charts.js"></script>
-<script type="text/javascript" src="./resources/ext/packages/ext-ux/build/ext-ux.js"></script>
+	<script type="text/javascript" src="./resources/ext/packages/sencha-charts/build/sencha-charts.js"></script>
+	<script type="text/javascript" src="./resources/ext/packages/ext-ux/build/ext-ux.js"></script>
 
-<script type="text/javascript" src="./resources/ext/packages/ext-theme-crisp-touch/build/ext-theme-crisp-touch.js"></script>
+	<script type="text/javascript" src="./resources/ext/packages/ext-theme-crisp-touch/build/ext-theme-crisp-touch.js"></script>
 
-<script type="text/javascript">
-Ext.Loader.setConfig({ enabled: false });
-Ext.setGlyphFontFamily('FontAwesome');
+	<script type="text/javascript">
+		Ext.Loader.setConfig({ enabled: false });
+		Ext.setGlyphFontFamily('FontAwesome');
 
-
-	var base_path = ".";
-	var builder_path = ".";
-	var star_link = "";
-	var has_article = false;
-	var logged_in = true;
-	var published = true;
-	var drupal_node_ID = -1;
-	var graph_source_data = "";
-	var graph_title = "";
-	var graph_description = "";
-	var graph_tags = "";
-	var saved_enabled = false;
-	var is_editor = true;
-	var is_embed = false;
-	var is_topBar = true;
-	var is_sideBar = true;
-	var is_zoom = true;
-	var is_ebook = false;
-</script>
-
+		var base_path = ".";
+		var builder_path = ".";
+		var star_link = "";
+		var has_article = false;
+		var logged_in = true;
+		var published = true;
+		var drupal_node_ID = -1;
+		var graph_source_data = "";
+		var graph_title = "";
+		var graph_description = "";
+		var graph_tags = "";
+		var saved_enabled = false;
+		var is_editor = true;
+		var is_embed = false;
+		var is_topBar = true;
+		var is_sideBar = true;
+		var is_zoom = true;
+		var is_ebook = false;
+	</script>
 
 	<div id="header"><div style="float:right;margin:5px;" class="x-small-editor"></div></div>
 
-
 	<script type="text/javascript">
-	var scriptBase = base_path;
-	var mxBasePath = base_path;
-	var mxLoadResources = false;
-	var mxLoadStylesheets = false;
+		var scriptBase = base_path;
+		var mxBasePath = base_path;
+		var mxLoadResources = false;
+		var mxLoadStylesheets = false;
 	</script>
 
 	<script type="text/javascript" src="./resources/require.js"></script>
@@ -119,9 +107,9 @@ Ext.setGlyphFontFamily('FontAwesome');
 	<script type="text/javascript" src="./js/SharedJS.js"></script>
 	<script type="text/javascript" src="./js/ModelImporter.js"></script>
 	<script type="text/javascript" src="./js/FileManager.js"></script>
-  <script type="text/javascript">
+  	<script type="text/javascript">
  		mxBasePath = './resources/mxgraph/src/';
-  </script>
+  	</script>
 	<script type="text/javascript" src="./resources/mxgraph/mxClient.js"></script>
 	<script type="text/javascript" src="./js/ExtOverrides.js"></script>
 	<script type="text/javascript" src="./js/Updater.js"></script>
@@ -180,8 +168,6 @@ Ext.setGlyphFontFamily('FontAwesome');
 	<script type="text/javascript" src="./resources/xml2json.min.js"></script>
 	<script type="text/javascript" src="./resources/scc.js"></script>
 	<script type="text/javascript" src="./resources/graph.js"></script>
-
-
 
 	<script type="text/javascript" src="./resources/ace/src-min/ace.js" charset="utf-8"></script>
 	<script type="text/javascript" src="./resources/framewarp/framewarp.js"></script>

@@ -1,0 +1,29 @@
+.file-load-button-override {
+	left: 0 !important;
+	width: 100% !important;
+	height: 31px !important;
+}
+.file-load-button-override .x-panel-body {
+	width: 100% !important;
+}
+.file-load-button-override .x-panel-body .x-form-item {
+	margin-bottom: 0;
+}
+.file-load-button-override .x-panel-body .x-form-file-btn {
+	width: 246px;
+	background-color: transparent;
+	border-radius: 0;
+	border-width: 0;
+}
+.file-load-button-override .x-panel-body .x-form-file-btn.x-btn-over {
+	background-color: #d6e8f6;
+}
+.file-load-button-override .x-panel-body .x-form-file-btn .x-btn-button {
+	text-align: left;
+}
+.file-load-button-override .x-panel-body .x-form-file-btn .x-btn-icon-el {
+	color: gray;
+}
+.file-load-button-override .x-panel-body .x-form-file-btn .x-btn-inner {
+	color: #000;
+}

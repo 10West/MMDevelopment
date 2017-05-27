@@ -90,15 +90,19 @@ var FileManagerWeb = new function() {
 
 // File upload button
 var fileUploadForm = new Ext.form.Panel({
+	cls: 'file-load-button-override',
     items: [{
         xtype: 'filefield',
         name: 'upload',
         allowBlank: false,
 		buttonOnly: true,
 		hideLabel: true,
-		buttonText: getText('Load'),
-		tooltip: getText('Load model'),
-		glyph: 0xf115,
+		buttonConfig: {
+			text: getText('Load'),
+			tooltip: getText('Load model'),
+			glyph: 0xf115,
+			focusCls: 'x-menu-item-active'
+		},
         listeners: {
         	'change': function(fileInput) {
         		openFile({
