@@ -28,7 +28,10 @@ function getModelXML2() {
 	var graph_dom=enc.encode(graph.getModel());
 	var graph_dom_xml=graph_dom.innerHTML;
 
-	var resultsSet = '<resultsset results-csv-data="'+exportResultsCSV()+'"/>';
+	var resultsData = exportResultsCSV();
+	if (resultsData.errorPrimitive) return resultsData;
+
+	var resultsSet = '<resultsset results-csv-data="'+resultsData+'"/>';
 
 	var rootIdx = graph_dom_xml.lastIndexOf("</root>");
 	if (rootIdx > -1) {
@@ -61,13 +64,15 @@ var FileManagerWeb = new function() {
 			}
 			if (btn == 'ok'){
 				var xml_data = getModelXML2();
-				model_name=appendFileExtension(model_name,InsightMakerFileExtension);
-
-				self.set_filename(model_name);
-				downloadFile(model_name,xml_data);
+				if (xml_data.errorPrimitive) {
+					Ext.MessageBox.alert('Diagram error', 'Diagram is invalid: '+xml_data.error);
+				} else {
+					model_name=appendFileExtension(model_name,InsightMakerFileExtension);
+					self.set_filename(model_name);
+					downloadFile(model_name,xml_data);
+				}
 			}
 		});
-
 	};
 
 	this.loadModel = function() {
