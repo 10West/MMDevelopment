@@ -23,7 +23,9 @@ function setTitle(filename) {
 }
 
 // Get xml data for the current model
-function getModelXML2() {
+function getModelXML2(baseNodeName) {
+	if (baseNodeName == null) baseNodeName = 'ModelMakerModel';
+
 	var enc = new mxCodec();
 	var graph_dom=enc.encode(graph.getModel());
 	var graph_dom_xml=graph_dom.innerHTML;
@@ -38,7 +40,7 @@ function getModelXML2() {
   		var graph_dom_xml = graph_dom_xml.substr(0, rootIdx) + resultsSet + graph_dom_xml.substr(rootIdx);
   	}
 
-	var xml_data="<InsightMakerModel>"+graph_dom_xml+"</InsightMakerModel>";
+	var xml_data="<"+baseNodeName+">"+graph_dom_xml+"</"+baseNodeName+">";
 	return xml_data;
 }
 
@@ -57,13 +59,31 @@ var FileManagerWeb = new function() {
 		setTitle(filename);
 	}
 
+	this.exportModel = function() {
+		Ext.MessageBox.prompt('Model name', 'Enter name of model', function(btn, model_name){
+			if(btn=='cancel') {
+				return;
+			}
+			if (btn == 'ok'){
+				var xml_data = getModelXML2('ModelMakerExport');
+				if (xml_data.errorPrimitive) {
+					Ext.MessageBox.alert('Primitive ['+xml_data.errorPrimitive.value.attributes["0"].nodeValue+'] is invalid',xml_data.error);
+				} else {
+					model_name=appendFileExtension(model_name,InsightMakerFileExtension);
+					self.set_filename(model_name);
+					downloadFile(model_name,xml_data);
+				}
+			}
+		});
+	};
+
 	this.saveModel = function() {
 		Ext.MessageBox.prompt('Model name', 'Enter name of model', function(btn, model_name){
 			if(btn=='cancel') {
 				return;
 			}
 			if (btn == 'ok'){
-				var xml_data = getModelXML2();
+				var xml_data = getModelXML2('ModelMakerSave');
 				if (xml_data.errorPrimitive) {
 					Ext.MessageBox.alert('Primitive ['+xml_data.errorPrimitive.value.attributes["0"].nodeValue+'] is invalid',xml_data.error);
 				} else {
@@ -148,8 +168,15 @@ menu: [
 	fileUploadForm,
 	{
 		glyph: 0xf0c7,
+		text: getText('To Excel'),
+		tooltip: getText('Export to Excel'),
+		handler: FileManagerWeb.exportModel,
+		scope: this
+	},
+	{
+		glyph: 0xf0c7,
 		text: getText('Save'),
-		tooltip: getText('Save model'),
+		tooltip: getText('Save model to file'),
 		handler: FileManagerWeb.saveModel,
 		scope: this
 	}
