@@ -65,7 +65,7 @@ var FileManagerWeb = new function() {
 			if (btn == 'ok'){
 				var xml_data = getModelXML2();
 				if (xml_data.errorPrimitive) {
-					Ext.MessageBox.alert('Diagram error', 'Diagram is invalid: '+xml_data.error);
+					Ext.MessageBox.alert('Primitive ['+xml_data.errorPrimitive.value.attributes["0"].nodeValue+'] is invalid',xml_data.error);
 				} else {
 					model_name=appendFileExtension(model_name,InsightMakerFileExtension);
 					self.set_filename(model_name);
