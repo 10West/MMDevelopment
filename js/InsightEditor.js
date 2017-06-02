@@ -74,7 +74,7 @@ function renderTimeBut(value) {
 	Ext.Function.defer(function() {
 		new Ext.Button({
 			text: getText("Edit Time Settings"),
-			
+
 			padding: 0,
 			margin: 0,
 			handler: function(btn, e) {
@@ -113,22 +113,22 @@ mxGraph.prototype.duplicateCells = function(cells, append)
 {
 	cells = (cells != null) ? cells : this.getSelectionCells();
 	append = (append != null) ? append : true;
-	
+
 	cells = this.model.getTopmostCells(cells);
-	
+
 	var model = this.getModel();
 	var s = this.gridSize;
 	var select = [];
-	
+
 	model.beginUpdate();
 	try
 	{
 		for (var i = 0; i < cells.length; i++)
 		{
 			var parent = model.getParent(cells[i]);
-			var child = this.moveCells([cells[i]], s, s, true, parent)[0]; 
+			var child = this.moveCells([cells[i]], s, s, true, parent)[0];
 			select.push(child);
-			
+
 			// Maintains child index by inserting after cloned in parent
 			if (!append)
 			{
@@ -141,14 +141,14 @@ mxGraph.prototype.duplicateCells = function(cells, append)
 	{
 		model.endUpdate();
 	}
-	
+
 	return select;
 };
 
 
 var equationRenderer = function(eq, perserveLines) {
 	var res = eq;
-	
+
 
 	res = res.replace(/</g, "&lt;");
 	res = res.replace(/>/g, "&gt;");
@@ -157,7 +157,7 @@ var equationRenderer = function(eq, perserveLines) {
 	res = res.replace(/(«.*?»)/g, "<font color='Orange'>$1</font>");
 	res = res.replace(/\b([\d\.e]+)\b/g, "<font color='DeepSkyBlue'>$1</font>");
 	res = res.replace(/(\{.*?\})/g, "<font color='Orange'>$1</font>");
-	
+
 	if (/\\n/.test(res)) {
 		if(perserveLines === true){
 			res = res.replace(/\\n/g, "<br>");
@@ -223,7 +223,7 @@ function main() {
 	Ext.FocusManager.shouldShowFocusFrame = function() {
 		return false;
 	};*/
-			
+
 
 	Ext.QuickTips.init();
 
@@ -272,13 +272,13 @@ function main() {
 
 	// Larger tolerance and grid for real touch devices
 	if (!(mxClient.IS_TOUCH || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0)) {
-		
+
 	} else {
-		
+
 		mxGraph.prototype.collapsedImage=new mxImage(mxClient.imageBasePath+"/collapsed.gif", 18, 18);
 		mxGraph.prototype.expandedImage=new mxImage(mxClient.imageBasePath+"/expanded.gif", 18, 18);
-		
-		
+
+
 		mxShape.prototype.svgStrokeTolerance = 18;
 		mxVertexHandler.prototype.tolerance = 12;
 		mxEdgeHandler.prototype.tolerance = 12;
@@ -300,7 +300,7 @@ function main() {
 			// Blocks further processing of the event
 			evt.consume();
 		});
-		
+
 
 		mxPanningHandler.prototype.isPanningTrigger = function(me) {
 			var evt = me.getEvent();
@@ -526,8 +526,8 @@ function main() {
 		border: false,
 		id: "mxPanelForModelGraph"
 	});
-	
- 
+
+
 
 	mainPanel = Ext.create('Ext.Panel', {
 		region: 'center',
@@ -565,7 +565,7 @@ function main() {
 				scope: this,
 				id: 'unfoldUnfoldBut',
 				handler: function() {
-					
+
 					revealUnfoldButtons(true);
 					beginUnfolding();
 				}
@@ -631,8 +631,8 @@ function main() {
 			document.activeElement.blur()
 		}
     });
-	
-	
+
+
 	var connectionChangeHandler = function(sender, evt) {
 		var item = evt.getProperty("edge");
 		if (item.value.nodeName == "Link") {
@@ -707,7 +707,7 @@ function main() {
 	});
 
 
-	// Initializes the graph as the DOM for the panel has now been created	
+	// Initializes the graph as the DOM for the panel has now been created
 	graph.init(mxPanel.getEl().dom);
 	graph.setConnectable(viewConfig.allowEdits);
 	graph.setDropEnabled(true);
@@ -796,7 +796,7 @@ function main() {
 				}
 			}
 		}
-		
+
 		if (connectionType() !== 'Link' && source && target) {
 			if (orig(source).value.nodeName == 'Stock' || orig(source).value.nodeName == 'State') {
 				if (orig(source).value.nodeName != orig(target).value.nodeName) {
@@ -804,17 +804,17 @@ function main() {
 				}
 			}
 		}
-		
+
 		if (edge) {
 			if (edge.value.nodeName == 'Transition' && ((source && orig(source).value.nodeName == 'Stock') || (target && orig(target).value.nodeName == 'Stock'))) {
 				return getText('You cannot connect a Transition to a Stock.');
 			}
-			
+
 			if (edge.value.nodeName == 'Flow' && ( (source && orig(source).value.nodeName == 'State') || (target && orig(target).value.nodeName == 'State'))) {
 				return getText('You cannot connect a Flow to a State.');
 			}
 		}
-		
+
 		return mxGraph.prototype.getEdgeValidationError.apply(this, arguments);
 	};
 
@@ -890,8 +890,8 @@ function main() {
 			}
 		}
 		var selectedNonGhost = selected && (graph.getSelectionCount() == 1 ? graph.getSelectionCell().value.nodeName != "Ghost" : true);
-		
-		
+
+
 
 		toolbarItems.down('#folder').setDisabled(graph.getSelectionCount() <= 0);
 		toolbarItems.down('#ghostBut').setDisabled(graph.getSelectionCount() != 1 || ((!isValued(graph.getSelectionCell()) && graph.getSelectionCell().value.nodeName != "Picture" && graph.getSelectionCell().value.nodeName != "Agents")) || graph.getSelectionCell().value.nodeName == "Flow" || graph.getSelectionCell().value.nodeName == "Transition" || graph.getSelectionCell().value.nodeName == "Ghost");
@@ -981,7 +981,7 @@ function main() {
 		if (linkedResults && cell != null) {
 			var displayInformation = linkedResults.displayInformation;
 			//console.log(displayInformation);
-			
+
 			var displaySeries = [];
 			var displayIds = [];
 			var defaultColorIndex = 0;
@@ -989,7 +989,7 @@ function main() {
 				if (cell.id == displayInformation.ids[i]) {
 					var x = displayInformation.elementIds[i];
 					displayIds.push(x);
-					
+
 					var c = null;
 					if (!isGray(displayInformation.colors[i])) {
 						c = displayInformation.colors[i];
@@ -998,7 +998,7 @@ function main() {
 						defaultColorIndex++;
 						defaultColorIndex = defaultColorIndex % defaultColors.length;
 					}
-					
+
 					displaySeries.push({
 						type: 'line',
 						axis: "left",
@@ -1010,14 +1010,14 @@ function main() {
 						smooth: false,
 						style: {'stroke-width': 3}
 					});
-					
+
 				}
 			}
-			
+
 			if(displayIds.length == 0){
 				return undefined;
 			}
-			
+
 			return {
 						flex: 1,
 				width: 200,
@@ -1054,7 +1054,7 @@ function main() {
 						],
 						series: displaySeries
 					};
-					
+
 		} else {
 			return "";
 		}
@@ -1216,11 +1216,11 @@ function main() {
 	keyHandler.bindControlKey(65, function() {
 		graph.selectAll();
 	});
-	
+
 	// Ctrl+D
 	keyHandler.bindControlKey(68, function(){
 		graph.setSelectionCells(graph.duplicateCells());
-	}); 
+	});
 
 	//bold
 	keyHandler.bindControlKey(66, function() {
@@ -1341,9 +1341,9 @@ function main() {
 
 
 	graph.getSelectionModel().addListener(mxEvent.CHANGE, function(sender, evt) {
-		
+
 			selectionChanged(false);
-		
+
 	});
 
 
@@ -1373,7 +1373,7 @@ function main() {
 
 
 	selectionChanged = function(forceClear) {
-		
+
 		if (isDefined(grid)) {
 			grid.plugins[0].completeEdit();
 			configPanel.removeAll()
@@ -1530,7 +1530,8 @@ function main() {
 				if (is_ebook) {
 					topDesc = "<center><big>Select a primitive to see its properties.</big></center>";
 				} else {
-					topDesc = "<center><a href='https://www.youtube.com/watch?v=zskFaBZt3HA' target='_blank'><img src='" + builder_path + "/images/Help.jpg' width=217 height=164 /><br><big>Watch this short video &rsaquo; </big></a><br/><br/><br/>Or take a look at the <a href='http://InsightMaker.com/help' target='_blank'>Detailed Insight Maker Manual</a><br/><br/>There is also a <a href='https://kumu.io/stw/insight-maker' target='_blank'>free, on-line education course</a> which teaches you how to think in a systems manner using Insight Maker.</center>";
+					topDesc = "<center><big>Select a primitive to see its properties.</big></center>";
+					//topDesc = "<center><a href='https://www.youtube.com/watch?v=zskFaBZt3HA' target='_blank'><img src='" + builder_path + "/images/Help.jpg' width=217 height=164 /><br><big>Watch this short video &rsaquo; </big></a><br/><br/><br/>Or take a look at the <a href='http://InsightMaker.com/help' target='_blank'>Detailed Insight Maker Manual</a><br/><br/>There is also a <a href='https://kumu.io/stw/insight-maker' target='_blank'>free, on-line education course</a> which teaches you how to think in a systems manner using Insight Maker.</center>";
 				}
 			} else {
 
@@ -1683,7 +1684,7 @@ function main() {
 				'group': ' ' + getText('Configuration'),
 				'renderer': renderTimeBut
 			});
-			
+
 			properties.push({
 				'name': 'Frozen',
 				'text': getText('Frozen'),
@@ -1991,7 +1992,7 @@ function main() {
 		} else if (cellType == "Ghost") {
 			bottomDesc = descBase + "This item is a 'Ghost' of another primitive. It mirrors the values and properties of its source primitive. You cannot edit the properties of the Ghost. You need to instead edit the properties of its source.";
 			bottomDesc = bottomDesc + "<center style='padding-top: 6px'><a href='#' onclick='var x = findID(getSelected()[0].getAttribute(\"Source\"));highlight(x);'>Show Source <i class='fa fa-angle-right '></i></a></center>" + descriptionLink("/ghosting", "Ghosts");
-			
+
 		} else if (cellType == "Converter") {
 			bottomDesc = descBase + "Converters store a table of input and output data. When the input source takes on one of the input values, the converter takes on the corresponding output value. If no specific input value exists for the current input source value, then the nearest input neighbors are averaged. " + descriptionLink("/converters", "Converters");
 			var n = neighborhood(cell);
@@ -2100,7 +2101,7 @@ function main() {
 		graph.fit();
 		graph.fit();
 	}
-	
+
 
 	// Override importCells to map key ID's
 
@@ -2112,11 +2113,11 @@ function main() {
 			getChildren(cell, false).forEach(setID);
 		}
 	};
-		
+
 	graph.cloneCells = function(cells){
-		
+
 		cells.forEach(setID);
-		
+
 		return mxGraph.prototype.cloneCells.apply(graph, arguments);
 	}
 
@@ -2135,12 +2136,12 @@ function main() {
 			}
 			return findID(oldID);
 		}
-	
-		
+
+
 		cells.forEach(setID);
-	
+
 		var newCells = mxGraph.prototype.importCells.apply(graph, arguments);
-	
+
 		var updateID = function(cell) {
 			if (cell.getAttribute("oldId") != undefined && cell.getAttribute("oldId") != "undefined") {
 				if (cell.value.nodeName == "Converter") {
@@ -2154,16 +2155,16 @@ function main() {
 					cell.setAttribute("Source", cellWithOldID(cell.getAttribute("Source")).id);
 				}
 			}
-			
+
 			if(getType(cell) == "Folder"){
 				getChildren(cell, false).forEach(updateID);
 			}
 		};
-		
+
 		newCells.forEach(updateID);
 
 		newCells.forEach(setID);
-		
+
 		return newCells;
 	}
 
@@ -2179,7 +2180,7 @@ function main() {
 				state.style[mxConstants.STYLE_DASHED] = 0;
 				//console.log(state.style);
 			}
-	
+
 		}
 	};
 
@@ -2187,7 +2188,7 @@ function main() {
 	{
 	    currentState: null,
 	    previousStyle: null,
-    
+
 	    mouseMove: function(sender, me)
 	    {
 	        if (this.currentState != null && me.getState() == this.currentState)
@@ -2245,7 +2246,7 @@ function main() {
 					/*if(getFontColor(state.cell) == undefined){
 						state.style[mxConstants.STYLE_FONTCOLOR] = mxConstants.NONE;
 					}*/
-					
+
 		        	state.shape.apply(state);
 		        	state.shape.reconfigure();
 				}
@@ -2254,8 +2255,8 @@ function main() {
 		mouseDown: function(){},
 		mouseUp: function(){}
 	});
-	
-	
+
+
 	window.doneLoading = true;
 
 };
@@ -2348,17 +2349,17 @@ function showContextMenu(node, e) {
 				if (cells != null)
 				{
 					var bb = graph.getBoundingBoxFromGeometry(cells);
-				
+
 					if (bb != null)
 					{
 						var t = graph.view.translate;
 						var s = graph.view.scale;
 						var dx = t.x;
 						var dy = t.y;
-					
+
 						var x = Math.round(graph.snap(pt.x / s - dx));
 						var y = Math.round(graph.snap(pt.y / s - dy));
-					
+
 						graph.cellsMoved(cells, x - bb.x, y - bb.y);
 					}
 				}
@@ -2373,11 +2374,11 @@ function showContextMenu(node, e) {
 		},
 		scope: this
 	};
-	
+
 	var menuItems = [];
 	if(viewConfig.allowEdits){
-		
-	
+
+
 	if (!selected) {
 		var menuItems = [
 			/*editActions.paste,
@@ -2517,7 +2518,7 @@ function showContextMenu(node, e) {
 
 
 		}
-		
+
 		if(!mxClipboard.isEmpty()){
 			menuItems.unshift("-");
 			menuItems.unshift(paste);
@@ -2576,7 +2577,7 @@ function showContextMenu(node, e) {
 		menu.down('#bold').setChecked(currentStyleIs(mxConstants.FONT_BOLD));
 		menu.down('#italic').setChecked(currentStyleIs(mxConstants.FONT_ITALIC));
 		menu.down('#underline').setChecked(currentStyleIs(mxConstants.FONT_UNDERLINE));
-		
+
         menu.down("#sizeCombo").setValue(graph.getCellStyle(selectedItems[0])[mxConstants.STYLE_FONTSIZE]);
         menu.down("#fontCombo").setValue(graph.getCellStyle(selectedItems[0])[mxConstants.STYLE_FONTFAMILY]);
 	} else {
@@ -2594,7 +2595,7 @@ function showContextMenu(node, e) {
 mxCellRenderer.prototype.initControl = function(state, control, handleEvents, clickHandler)
 {
 	var graph = state.view.graph;
-	
+
 	// In the special case where the label is in HTML and the display is SVG the image
 	// should go into the graph container directly in order to be clickable. Otherwise
 	// it is obscured by the HTML label that overlaps the cell.
@@ -2613,18 +2614,18 @@ mxCellRenderer.prototype.initControl = function(state, control, handleEvents, cl
 	}
 
 	var node = control.innerNode || control.node;
-	
+
 	if (clickHandler)
 	{
 		if (graph.isEnabled())
 		{
 			node.style.cursor = 'pointer';
 		}
-		
+
 		mxEvent.addListener(node, 'click', clickHandler);
 		mxEvent.addListener(node, 'touchstart', clickHandler); /*SFR XXX adding touch support*/
 	}
-	
+
 	if (handleEvents)
 	{
 		mxEvent.addGestureListeners(node,
@@ -2638,7 +2639,7 @@ mxCellRenderer.prototype.initControl = function(state, control, handleEvents, cl
 				graph.fireMouseEvent(mxEvent.MOUSE_MOVE, new mxMouseEvent(evt, state));
 			});
 	}
-	
+
 	return node;
 };
 
@@ -2648,15 +2649,15 @@ mxSvgCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 	if (this.textEnabled && str != null)
 	{
 		rotation = (rotation != null) ? rotation : 0;
-		
+
 		var s = this.state;
 		x += s.dx;
 		y += s.dy;
-		
+
 		if (this.foEnabled && format == 'html')
 		{
 			var style = 'vertical-align:top;';
-			
+
 			if (clip)
 			{
 				style += 'overflow:hidden;max-height:' + Math.round(h) + 'px;max-width:' + Math.round(w) + 'px;';
@@ -2668,7 +2669,7 @@ mxSvgCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 			else if (overflow == 'width')
 			{
 				style += 'width:' + Math.round(w) + 'px;';
-				
+
 				if (h > 0)
 				{
 					style += 'max-height:' + Math.round(h) + 'px;';
@@ -2683,11 +2684,11 @@ mxSvgCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 			{
 				style += 'white-space:nowrap;';
 			}
-			
+
 			// Uses outer group for opacity and transforms to
 			// fix rendering order in Chrome
 			var group = this.createElement('g');
-			
+
 			if (s.alpha < 1)
 			{
 				group.setAttribute('opacity', s.alpha);
@@ -2695,9 +2696,9 @@ mxSvgCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 
 			var fo = this.createElement('foreignObject');
 			fo.setAttribute('pointer-events', 'all');
-			
+
 			var div = this.createDiv(str, align, valign, style, overflow);
-			
+
 			// Ignores invalid XHTML labels
 			if (div == null)
 			{
@@ -2710,12 +2711,12 @@ mxSvgCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 
 			group.appendChild(fo);
 			this.root.appendChild(group);
-			
+
 			// Code that depends on the size which is computed after
 			// the element was added to the DOM.
 			var ow = 0;
 			var oh = 0;
-			
+
 			// Padding avoids clipping on border and wrapping for differing font metrics on platforms
 			var padX = 2;
 			var padY = 2;
@@ -2725,7 +2726,7 @@ mxSvgCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 			{
 				// Handles non-standard namespace for getting size in IE
 				var clone = document.createElement('div');
-				
+
 				clone.style.cssText = div.getAttribute('style');
 				clone.style.display = (mxClient.IS_QUIRKS) ? 'inline' : 'inline-block';
 				clone.style.position = 'absolute';
@@ -2749,10 +2750,10 @@ mxSvgCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 				if (wrap && w > 0)
 				{
 					var tmp = div2.offsetWidth;
-					
+
 					// Workaround for adding padding twice in IE8/IE9 standards mode if label is wrapped
 					var padDx = 0;
-					
+
 					// For export, if no wrapping occurs, we add a large padding to make
 					// sure there is no wrapping even if the text metrics are different.
 					// This adds support for text metrics on different operating systems.
@@ -2760,7 +2761,7 @@ mxSvgCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 					{
 						var ws = clone.style.whiteSpace;
 						clone.style.whiteSpace = 'nowrap';
-						
+
 						// Checks if wrapped width is equal to non-wrapped width (ie no wrapping)
 						if (tmp == div2.offsetWidth)
 						{
@@ -2770,26 +2771,26 @@ mxSvgCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 						{
 							padDx = -2;
 						}
-						
+
 						// Restores the previous white space
 						// This is expensive!
 						clone.style.whiteSpace = ws;
 					}
-					
+
 					// Required to update the height of the text box after wrapping width is known
 					tmp = tmp + padX;
-					
+
 					if (clip)
 					{
 						tmp = Math.min(tmp, w);
 					}
-					
+
 					clone.style.width = tmp + 'px';
-	
+
 					// Padding avoids clipping on border
 					ow = div2.offsetWidth + padX + padDx;
 					oh = div2.offsetHeight + padY;
-					
+
 					// Overrides the width of the DIV via XML DOM by using the
 					// clone DOM style, getting the CSS text for that and
 					// then setting that on the DIV via setAttribute
@@ -2797,7 +2798,7 @@ mxSvgCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 					clone.style.position = '';
 					clone.style.visibility = '';
 					clone.style.width = ow + 'px';
-					
+
 					div.setAttribute('style', clone.style.cssText);
 				}
 				else
@@ -2827,26 +2828,26 @@ mxSvgCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 				}
 
 				var sizeDiv = div;
-				
+
 				if (sizeDiv.firstChild != null && sizeDiv.firstChild.nodeName == 'DIV')
 				{
 					sizeDiv = sizeDiv.firstChild;
 				}
-				
+
 				var tmp = sizeDiv.offsetWidth;
-				
+
 				// For export, if no wrapping occurs, we add a large padding to make
 				// sure there is no wrapping even if the text metrics are different.
 				if (!clip && wrap && w > 0 && this.root.ownerDocument != document)
 				{
 					var ws = div.style.whiteSpace;
 					div.style.whiteSpace = 'nowrap';
-					
+
 					if (tmp == sizeDiv.offsetWidth)
 					{
 						padX += this.fontMetricsPadding;
 					}
-					
+
 					div.style.whiteSpace = ws;
 				}
 
@@ -2859,7 +2860,7 @@ mxSvgCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 					{
 						ow = Math.min(ow, w);
 					}
-					
+
 					div.style.width = ow + 'px';
 				}
 
@@ -2899,7 +2900,7 @@ mxSvgCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 			{
 				group.setAttribute('opacity', s.alpha);
 			}
-			
+
 			var dx = 0;
 			var dy = 0;
 
@@ -2911,9 +2912,9 @@ mxSvgCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 			{
 				dx -= w;
 			}
-			
+
 			x += dx;
-			
+
 			// FIXME: LINE_HEIGHT not ideal for all text sizes, fix for export
 			if (valign == mxConstants.ALIGN_MIDDLE)
 			{
@@ -2923,7 +2924,7 @@ mxSvgCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 			{
 				dy -= h - 3;
 			}
-			
+
 			// Workaround for rendering offsets
 			// TODO: Check if export needs these fixes, too
 			//if (this.root.ownerDocument == document)
@@ -2937,14 +2938,14 @@ mxSvgCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 					dy -= 1;
 				}
 			}
-			
+
 			if(mxClient.IS_FF ){
 				dy -= 1; /* SFR XX FIXME Spacing is off without this */
 			}else{
 				dy -= 2; /* SFR XX FIXME Spacing is off without this */
 			}
-			
-			
+
+
 			y += dy;
 
 			var tr = (s.scale != 1) ? 'scale(' + s.scale + ')' : '';
@@ -2971,12 +2972,12 @@ mxSvgCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 			group.setAttribute('transform', 'translate(' + Math.round(x) + ',' + Math.round(y) + ')' + tr);
 			fo.setAttribute('width', Math.round(Math.max(1, w)));
 			fo.setAttribute('height', Math.round(Math.max(1, h)));
-			
+
 			// Adds alternate content if foreignObject not supported in viewer
 			if (this.root.ownerDocument != document)
 			{
 				var alt = this.createAlternateContent(fo, x, y, w, h, str, align, valign, wrap, format, overflow, clip, rotation);
-				
+
 				if (alt != null)
 				{
 					fo.setAttribute('requiredFeatures', 'http://www.w3.org/TR/SVG11/feature#Extensibility');
