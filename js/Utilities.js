@@ -350,9 +350,9 @@ function setSaveEnabled(e) {
 function updateWindowTitle() {
 	if (!is_embed) {
 		if (graph_title == "") {
-			document.title = "Untitled Insight | Insight Maker";
+			document.title = "New Model | Model Maker";
 		} else {
-			document.title = graph_title + " | Insight Maker";
+			document.title = graph_title + " | Model Maker";
 			if(window.history && window.history.replaceState){
 
 				window.history.replaceState('Object', document.title, '/insight/' + drupal_node_ID + "/" + getURLTitle());

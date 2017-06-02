@@ -14,10 +14,10 @@ function appendFileExtension(filename,extension) {
 function setTitle(filename) {
 	var title;
 	if(filename) {
-		title = filename+"| Insight Maker";
+		title = filename+" | Model Maker";
 
 	} else {
-		title = "Insight Maker";
+		title = "Model Maker";
 	}
 	window.parent.document.title = title;
 }
