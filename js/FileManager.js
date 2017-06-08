@@ -31,7 +31,7 @@ function getModelXML2(baseNodeName) {
 	var graph_dom_xml=graph_dom.innerHTML;
 
 	var resultsData = exportResultsCSV();
-	if (resultsData.errorPrimitive) return resultsData;
+	if (resultsData.simulationError) return resultsData;
 
 	var resultsSet = '<resultsset results-csv-data="'+resultsData+'"/>';
 
@@ -66,8 +66,10 @@ var FileManagerWeb = new function() {
 			}
 			if (btn == 'ok'){
 				var xml_data = getModelXML2('ModelMakerExport');
-				if (xml_data.errorPrimitive) {
-					Ext.MessageBox.alert('Primitive ['+xml_data.errorPrimitive.value.attributes["0"].nodeValue+'] is invalid',xml_data.error);
+				if (xml_data.simulationError) {
+					var errorTitle = 'A simulation error occurred';
+					if(xml_data.simulationError.errorPrimitive) errorTitle = 'Primitive ['+xml_data.simulationError.errorPrimitive.value.attributes["0"].nodeValue+'] is invalid';
+					Ext.MessageBox.alert(errorTitle,xml_data.simulationError.error);
 				} else {
 					model_name=appendFileExtension(model_name,InsightMakerFileExtension);
 					self.set_filename(model_name);
@@ -84,8 +86,10 @@ var FileManagerWeb = new function() {
 			}
 			if (btn == 'ok'){
 				var xml_data = getModelXML2('ModelMakerSave');
-				if (xml_data.errorPrimitive) {
-					Ext.MessageBox.alert('Primitive ['+xml_data.errorPrimitive.value.attributes["0"].nodeValue+'] is invalid',xml_data.error);
+				if (xml_data.simulationError) {
+					var errorTitle = 'A simulation error occurred';
+					if(xml_data.simulationError.errorPrimitive) errorTitle = 'Primitive ['+xml_data.simulationError.errorPrimitive.value.attributes["0"].nodeValue+'] is invalid';
+					Ext.MessageBox.alert(errorTitle,xml_data.simulationError.error);
 				} else {
 					model_name=appendFileExtension(model_name,InsightMakerFileExtension);
 					self.set_filename(model_name);

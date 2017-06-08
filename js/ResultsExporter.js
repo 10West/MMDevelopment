@@ -14,7 +14,7 @@ function exportResultsCSV() {
 		},
 		onError: function(result){
 			// console.log('runModel Error');console.log(result);
-			res = result;
+			res = {'simulationError': result};
 		}
 	});
 	return res;
