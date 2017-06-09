@@ -38,20 +38,20 @@ var reverseDirection = function() {
 									}
 									edit = new mxGeometryChange(graph.getModel(), myCells[i], geo);
 									graph.getModel().execute(edit);
-									
-						
+
+
 									if(myCells[i].value.nodeName == "Link"){
 										linkBroken(myCells[i]);
 									}
 								}
 							}
 						}
-						
+
 						graph.getModel().endUpdate();
 
 
 					};
-					
+
 var showMacros = function(annotations) {
 		var equationEditor = new Ext.ux.AceEditor({
 			id: 'macroTxt',
@@ -88,7 +88,7 @@ var showMacros = function(annotations) {
 			plain: true,
 			items: [
 				equationEditor,
-				
+
 				 {
 					xtype: "box",
 					padding: 8,
@@ -127,7 +127,7 @@ var showMacros = function(annotations) {
 
 			]
 		});
-	
+
 	macrosWin.show();
 
 	equationEditor.focus(true, true);
@@ -253,7 +253,7 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 				}
 
 				graph.getModel().endUpdate();
-				
+
 				if(document.activeElement && document.activeElement.blur){
 					document.activeElement.blur()
 				}
@@ -392,8 +392,8 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 			graph.setCellStyles(mxConstants.STYLE_ROUNDED, 0, excludeType(graph.getSelectionCells(), "Ghost"));
 		}
 	}];
-	
-	
+
+
 	function customColor(fn){
 		return function(){
 			getCustomColor(function(col){
@@ -401,7 +401,7 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 			});
 		}
 	}
-	
+
 	var fontColorMenu = [
 		{
 				xtype: 'colorpicker',
@@ -422,7 +422,7 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 					handler: customColor(function(color){graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, color, excludeType(graph.getSelectionCells(), "Ghost"))})
 				}
 	];
-	
+
 	var widthMenu = [];
 
 	function widthItem(size) {
@@ -440,7 +440,7 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 	for (var i = 15; i <= 50; i += 5) {
 		widthItem(i);
 	}
-	
+
 	function capMenu(start) {
 
 		function createSetter(val) {
@@ -472,8 +472,8 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 		}
 		return items;
 	}
-	
-	
+
+
 	var lineColorMenu =  [{
 		xtype: 'colorpicker',
 		colors: colors,
@@ -738,7 +738,7 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 			}
 		}, '-', {
 			text: getText('Actual Size'),
-			
+
 			scope: this,
 			handler: function(item) {
 				setZoom("actual");
@@ -751,7 +751,7 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 			}
 		}]
 	};
-	
+
 
 	window.styleMenu = [
 
@@ -857,7 +857,7 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 					}
 				}, {
 					text: getText('Position Top'),
-					
+
 					scope: this,
 					iconCls: 'top-icon',
 					handler: function() {
@@ -909,7 +909,7 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 					}
 				}, {
 					text: getText('Position Left'),
-					
+
 					scope: this,
 					iconCls: 'right-icon',
 					handler: function() {
@@ -1034,33 +1034,33 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 			glyph: 0xf043,
 			handler: function() {
 				var cells = getSelected();
-				
+
 				var stylesheet = getStyleSheet();
-				
+
 				cells.forEach(function(x){
 					var style = x.getStyle();
 					var styles = style.split(";");
 					var obj = {};
-					
+
 					var o2 = graph.getStylesheet().getCellStyle(x.value.nodeName.toLowerCase());
-					
+
 					for(var item in o2){
 						obj[item] = o2[item];
 					}
-					
+
 					for(var i = 1; i < styles.length; i++){
 						var kv = styles[i].split("=");
 						obj[kv[0]] = kv[1];
 					}
-					
+
 					stylesheet[x.value.nodeName] = obj;
 				});
-				
+
 
 				graph.getModel().beginUpdate();
 				setStyleSheet(stylesheet);
 				graph.getModel().endUpdate();
-				
+
 				loadStyleSheet();
 			},
 			scope: this
@@ -1091,14 +1091,14 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 
 				{
 					hidden: (!viewConfig.primitiveGroup),
-					text: getText('Add Primitive'),
+					text: getText('Add Item'),
 					itemId: 'valued',
 					iconCls: 'green-icon',
 					glyph: 0xf055,
 					menu: [{
 							xtype: "component",
 							indent: false,
-							html: "<b>" + getText('System Dynamics') + "</b>",
+							html: "<b>" + getText('Model') + "</b>",
 							disabled: true,
 							style: {
 								"margin": "10px 5px 10px 5px"
@@ -1126,17 +1126,20 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 
 								graph.orderCells(false);
 							}
-						}, {
-							itemId: 'converter',
-							text: getText('Add Converter'),
-							glyph: 0xf1fe,
-							tooltip: getText('Converters can contain graphical functions or input/output tables'),
-							handler: function() {
-								highlight(createPrimitive("New Converter", "Converter", [240, 80], [120, 50]))
+						},
+						// {
+						// 	itemId: 'converter',
+						// 	text: getText('Add Converter'),
+						// 	glyph: 0xf1fe,
+						// 	tooltip: getText('Converters can contain graphical functions or input/output tables'),
+						// 	handler: function() {
+						// 		highlight(createPrimitive("New Converter", "Converter", [240, 80], [120, 50]))
 
-								graph.orderCells(false);
-							}
-						}, '-', {
+						// 		graph.orderCells(false);
+						// 	}
+						// },
+						'-',
+						 {
 
 							xtype: "component",
 							indent: false,
@@ -1168,18 +1171,21 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 
 								graph.orderCells(false);
 							}
-						}, {
-							itemId: 'buttonBut',
-							text: getText('Add Interactive Button'),
-							glyph: 0xf196,
-							tooltip: getText('Add interactivity to the model diagram'),
-							handler: function() {
-								highlight(createPrimitive("New Button", "Button", [240, 80], [120, 40]))
+						},
+						// {
+						// 	itemId: 'buttonBut',
+						// 	text: getText('Add Interactive Button'),
+						// 	glyph: 0xf196,
+						// 	tooltip: getText('Add interactivity to the model diagram'),
+						// 	handler: function() {
+						// 		highlight(createPrimitive("New Button", "Button", [240, 80], [120, 40]))
 
-								graph.orderCells(false);
-							}
+						// 		graph.orderCells(false);
+						// 	}
 
-						}, '-', {
+						// },
+						'-',
+						{
 							itemId: 'ghostBut',
 							text: getText('Ghost Primitive'),
 							glyph: 0xf0c5,
@@ -1249,7 +1255,7 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 				}, {
 					xtype: 'tbseparator',
 					hidden: (!is_editor) || is_embed
-				}, 
+				},
 				{
 					itemId: 'config',
 					text: getText('Settings'),
@@ -1401,7 +1407,7 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 				}, {
 					xtype: 'tbseparator',
 					hidden: !viewConfig.actionsGroup
-				}, 
+				},
 				{
 					hidden: (!viewConfig.shareGroup),
 					text: getText('Share'),
@@ -1520,7 +1526,7 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 							handler: scratchpadFn,
 							xtype: 'menucheckitem',
 							scope: this
-						}, 
+						},
 						{
 							xtype: 'menuseparator',
 							hidden: (!is_editor) || is_ebook
@@ -1536,7 +1542,7 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 							tooltip: getText('Compare Separate Simulation Runs'),
 							handler: function(){
 								var sum = 0;
-								
+
 								Ext.WindowMgr.each(
 								      function(win){
 											var t = win.down("#pinTool");
@@ -1603,7 +1609,7 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 					href: '//InsightMaker.com',
 					tooltip: 'Insight Maker Home'
 				}
-				
+
 
 			])
 		})
