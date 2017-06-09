@@ -1,4 +1,4 @@
-var InsightMakerFileExtension = ".InsightMaker";
+var InsightMakerFileExtension = ".ModelMaker";
 
 // Append file extension to file (if not already there)
 function appendFileExtension(filename,extension) {
