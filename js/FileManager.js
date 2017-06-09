@@ -80,6 +80,20 @@ var FileManagerWeb = new function() {
 	};
 
 	this.saveModel = function() {
+		var model_name = self.filename;
+
+		var xml_data = getModelXML2('ModelMakerSave');
+		if (xml_data.simulationError) {
+			var errorTitle = 'A simulation error occurred';
+			if(xml_data.simulationError.errorPrimitive) errorTitle = 'Primitive ['+xml_data.simulationError.errorPrimitive.value.attributes["0"].nodeValue+'] is invalid';
+			Ext.MessageBox.alert(errorTitle,xml_data.simulationError.error);
+		} else {
+			model_name=appendFileExtension(model_name,InsightMakerFileExtension);
+			downloadFile(model_name,xml_data);
+		}
+	};
+
+	this.saveModelAs = function() {
 		Ext.MessageBox.prompt('Model name', 'Enter name of model', function(btn, model_name){
 			if(btn=='cancel') {
 				return;
@@ -182,6 +196,13 @@ menu: [
 		text: getText('Save'),
 		tooltip: getText('Save model to file'),
 		handler: FileManagerWeb.saveModel,
+		scope: this
+	},
+	{
+		glyph: 0xf0c7,
+		text: getText('Save As'),
+		tooltip: getText('Save model to a new file'),
+		handler: FileManagerWeb.saveModelAs,
 		scope: this
 	}
 ]
