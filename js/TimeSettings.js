@@ -10,7 +10,7 @@ terms of the Insight Maker Public License (https://InsightMaker.com/impl).
 
 var timeSettingsFn = function(){
     var setting = getSetting();
-	
+
 	showTimeSettings({
 		algorithm: setting.getAttribute("SolutionAlgorithm"),
 		timeStep: setting.getAttribute("TimeStep"),
@@ -148,19 +148,19 @@ function showTimeSettings(config)
                 decimalPrecision: 12,
 				value: config.timePause
             }),
-            new Ext.form.ComboBox({
-                fieldLabel: getText("Analysis Algorithm"),
-                typeAhead: true,
-                triggerAction: 'all',
-                queryMode: 'local',
-                selectOnFocus: true,
-                forceSelection: true,
-                store:  [ ['RK1', getText('Fast (Euler)')], ['RK4',getText('Accurate (RK4)')] ],
-                id: 'sSolutionAlgo',
-                editable: true,
-				value: config.algorithm,
-				disabled: (config.cell && (!config.enabled))
-            }),
+    //         new Ext.form.ComboBox({
+    //             fieldLabel: getText("Analysis Algorithm"),
+    //             typeAhead: true,
+    //             triggerAction: 'all',
+    //             queryMode: 'local',
+    //             selectOnFocus: true,
+    //             forceSelection: true,
+    //             store:  [ ['RK1', getText('Fast (Euler)')], ['RK4',getText('Accurate (RK4)')] ],
+    //             id: 'sSolutionAlgo',
+    //             editable: true,
+				// value: config.algorithm,
+				// disabled: (config.cell && (!config.enabled))
+    //         }),
             new Ext.form.NumberField({
                 fieldLabel: getText('Simulation Time Step'),
                 id: 'stimestep',
@@ -197,11 +197,11 @@ function showTimeSettings(config)
   							}
 					      }
 					  );
-					  
-				
+
+
                     graph.getModel().beginUpdate();
 					if(config.cell){
-						
+
 	                    edit = new mxCellAttributeChange(
 	                   	 	config.cell,
 							"Solver",
@@ -212,10 +212,10 @@ function showTimeSettings(config)
 							})
 						);
 	                    graph.getModel().execute(edit);
-						
+
 					}else{
 					    var setting = getSetting();
-					
+
 
 	                    var edit = new mxCellAttributeChange(
 	                    setting, "SolutionAlgorithm",
@@ -236,7 +236,7 @@ function showTimeSettings(config)
 	                    setting, "TimeStep",
 	                    Ext.getCmp('stimestep').getValue().toString());
 	                    graph.getModel().execute(edit);
-						
+
 	                    edit = new mxCellAttributeChange(
 	                    setting, "TimePause",
 	                    Ext.getCmp('stimepause').getValue());
@@ -249,7 +249,7 @@ function showTimeSettings(config)
 					}
 
                     graph.getModel().endUpdate();
-					
+
                     configWin.close();
                 }
             }
@@ -258,8 +258,8 @@ function showTimeSettings(config)
 
     });
 
-   
+
     configWin.show();
-	
+
 	return configWin;
 };
