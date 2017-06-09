@@ -59,6 +59,18 @@ var FileManagerWeb = new function() {
 		setTitle(filename);
 	}
 
+	this.fileSaveSimError = function(errorObject) {
+		var errorTitle = 'A simulation error occurred';
+		if(errorObject.errorPrimitive) errorTitle = 'Primitive ['+errorObject.errorPrimitive.value.attributes["0"].nodeValue+'] is invalid';
+		Ext.MessageBox.alert(errorTitle,errorObject.error);
+	}
+
+	this.initiateDownload = function(model_name,xml_data) {
+		model_name=appendFileExtension(model_name,InsightMakerFileExtension);
+		self.set_filename(model_name);
+		downloadFile(model_name,xml_data);
+	}
+
 	this.exportModel = function() {
 		Ext.MessageBox.prompt('Model name', 'Enter name of model', function(btn, model_name){
 			if(btn=='cancel') {
@@ -67,13 +79,9 @@ var FileManagerWeb = new function() {
 			if (btn == 'ok'){
 				var xml_data = getModelXML2('ModelMakerExport');
 				if (xml_data.simulationError) {
-					var errorTitle = 'A simulation error occurred';
-					if(xml_data.simulationError.errorPrimitive) errorTitle = 'Primitive ['+xml_data.simulationError.errorPrimitive.value.attributes["0"].nodeValue+'] is invalid';
-					Ext.MessageBox.alert(errorTitle,xml_data.simulationError.error);
+					self.fileSaveSimError(xml_data.simulationError);
 				} else {
-					model_name=appendFileExtension(model_name,InsightMakerFileExtension);
-					self.set_filename(model_name);
-					downloadFile(model_name,xml_data);
+					self.initiateDownload(model_name,xml_data);
 				}
 			}
 		});
@@ -82,14 +90,15 @@ var FileManagerWeb = new function() {
 	this.saveModel = function() {
 		var model_name = self.filename;
 
-		var xml_data = getModelXML2('ModelMakerSave');
-		if (xml_data.simulationError) {
-			var errorTitle = 'A simulation error occurred';
-			if(xml_data.simulationError.errorPrimitive) errorTitle = 'Primitive ['+xml_data.simulationError.errorPrimitive.value.attributes["0"].nodeValue+'] is invalid';
-			Ext.MessageBox.alert(errorTitle,xml_data.simulationError.error);
+		if(!model_name) {
+			self.saveModelAs();
 		} else {
-			model_name=appendFileExtension(model_name,InsightMakerFileExtension);
-			downloadFile(model_name,xml_data);
+			var xml_data = getModelXML2('ModelMakerExport');
+			if (xml_data.simulationError) {
+				self.fileSaveSimError(xml_data.simulationError);
+			} else {
+				self.initiateDownload(model_name,xml_data);
+			}
 		}
 	};
 
@@ -99,15 +108,11 @@ var FileManagerWeb = new function() {
 				return;
 			}
 			if (btn == 'ok'){
-				var xml_data = getModelXML2('ModelMakerSave');
+				var xml_data = getModelXML2('ModelMakerExport');
 				if (xml_data.simulationError) {
-					var errorTitle = 'A simulation error occurred';
-					if(xml_data.simulationError.errorPrimitive) errorTitle = 'Primitive ['+xml_data.simulationError.errorPrimitive.value.attributes["0"].nodeValue+'] is invalid';
-					Ext.MessageBox.alert(errorTitle,xml_data.simulationError.error);
+					self.fileSaveSimError(xml_data.simulationError);
 				} else {
-					model_name=appendFileExtension(model_name,InsightMakerFileExtension);
-					self.set_filename(model_name);
-					downloadFile(model_name,xml_data);
+					self.initiateDownload(model_name,xml_data);
 				}
 			}
 		});
