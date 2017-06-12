@@ -93,7 +93,7 @@ var FileManagerWeb = new function() {
 		if(!model_name) {
 			self.saveModelAs();
 		} else {
-			var xml_data = getModelXML2('ModelMakerExport');
+			var xml_data = getModelXML2('ModelMakerSave');
 			if (xml_data.simulationError) {
 				self.fileSaveSimError(xml_data.simulationError);
 			} else {
@@ -108,7 +108,7 @@ var FileManagerWeb = new function() {
 				return;
 			}
 			if (btn == 'ok'){
-				var xml_data = getModelXML2('ModelMakerExport');
+				var xml_data = getModelXML2('ModelMakerSave');
 				if (xml_data.simulationError) {
 					self.fileSaveSimError(xml_data.simulationError);
 				} else {
