@@ -217,10 +217,10 @@ function showTimeSettings(config)
 					    var setting = getSetting();
 
 
-	                    var edit = new mxCellAttributeChange(
-	                    setting, "SolutionAlgorithm",
-	                    Ext.getCmp('sSolutionAlgo').getValue());
-	                    graph.getModel().execute(edit);
+	                    // var edit = new mxCellAttributeChange(
+	                    // setting, "SolutionAlgorithm",
+	                    // Ext.getCmp('sSolutionAlgo').getValue());
+	                    // graph.getModel().execute(edit);
 
 	                    var edit = new mxCellAttributeChange(
 	                    setting, "TimeLength",
