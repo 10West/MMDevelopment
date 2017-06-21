@@ -32,7 +32,7 @@ function exportResultsCSV() {
 
 		function addColumns(primitive) {
 			columns.push({
-				header: primitive.value.attributes["0"].nodeValue, // Use something more reliable like primitive.name ??????????
+				header: primitive.getAttribute('name'),
 				sortable: true,
 				flex: 1,
 				dataIndex: primitive['id'],
