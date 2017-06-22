@@ -240,33 +240,9 @@ function innerRunSimulation(config) {
 
 	var modelItems = primitives();
 
+	checkPrimitiveLinks(modelItems);
+
 	for (var i = 0; i < modelItems.length; i++) {
-
-
-		// Check all of each variables inbound links are used in their equations
-		if (modelItems[i].value.nodeName == 'Variable') {
-			var sourceName = modelItems[i].getAttribute('name');
-			var edges = modelItems[i].edges;
-
-			if(edges){
-				for (var j = 0; j < edges.length; j++) {
-					var target = findID(edges[j].target.id);
-					var targetEquation = target.getAttribute('Equation');
-
-					if (target.id != modelItems[i].id) {
-						if (target.value.nodeName == 'Variable') {
-							if (targetEquation.indexOf('['+sourceName+']') < 0) {
-								throw {
-									msg: getText("The equation for the primitive %s is missing a reference to %s.", "<i>" + clean(target.getAttribute('name')) + "</i>", "<i>" + clean(sourceName) + "</i>"),
-									primitive: target,
-									showEditor: false
-								};
-							}
-						}
-					}
-				}
-			}
-		}
 
 
 		if (modelItems[i].value.nodeName == "Agents") {
