@@ -32,7 +32,7 @@ function checkPrimitiveLinks(modelItems) {
 		if (target.id == item.id) return;
 
 		// Exempt equation inclusion requirement where connection is a Flow from a Stock
-		if (edge.value.nodeName == 'flow' && item.value.nodeName == 'Stock') return;
+		if (edge.value.nodeName == 'Flow' && item.value.nodeName == 'Stock') return;
 
 		var targetEquation;
 		if (target.value.nodeName == 'Stock') {
@@ -50,7 +50,7 @@ function checkPrimitiveLinks(modelItems) {
 		}
 
 		// Ensure equation value is a string
-		if (typeof targetEquation === undefined || targetEquation == null) targetEquation = '';
+		if ((typeof targetEquation == 'undefined') || targetEquation.length < 1) targetEquation = '';
 		targetEquation = String(targetEquation);
 
 		// Check target equation includes source object name
