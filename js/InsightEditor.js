@@ -2495,7 +2495,7 @@ function showContextMenu(node, e) {
 			menuItems = menuItems.concat([
 				'-', {
 					glyph: 0xf0ed,
-					text: getText("Insert Insight Maker Model"),
+					text: getText("Insert ModelMaker Component"),
 					handler: function() {
 						showInsertModelWindow(graph.getPointForEvent(e));
 					}

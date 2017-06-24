@@ -877,7 +877,7 @@ function handleErrorObject(err) {
 	} else if (err.error) {
 		mxUtils.alert(err);
 	} else {
-		mxUtils.alert(getText("An unknown model simulation error occurred. Please report this issue to the Model Maker team."));
+		mxUtils.alert(getText("An unknown model simulation error occurred. Please report this issue to the ModelMaker team."));
 	}
 }
 

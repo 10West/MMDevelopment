@@ -11,9 +11,9 @@ terms of the Insight Maker Public License (https://InsightMaker.com/impl).
 
 
 function showInsertModelWindow(pt) {
-	Ext.Msg.prompt('Insert Insight Maker Model', 'Enter the URL for the Insight Maker model you wish to insert (e.g. <i>' + base_path + '/insight/1234</i>). This model will be inserted as a component into your current model.', function(btn, url) {
+	Ext.Msg.prompt('Insert ModelMaker Component', 'Enter the URL for the ModelMaker component you wish to insert (e.g. <i>' + base_path + '/model/1234</i>). This model will be inserted as a component into your current model.', function(btn, url) {
 		if (btn == 'ok') {
-			var progress = Ext.MessageBox.wait(getText("Inserting Model..."), undefined, {
+			var progress = Ext.MessageBox.wait(getText("Inserting Component..."), undefined, {
 				icon: 'run-icon',
 				width: 300,
 				closable: false,
@@ -28,7 +28,7 @@ function showInsertModelWindow(pt) {
 					var matches = txt.match(/var graph_source_data = (".*?");\n/);
 
 					if ((!matches) || matches[1].trim() == "") {
-						mxUtils.alert("Model could not be inserted. Please ensure the model URL is correct.");
+						mxUtils.alert("Component could not be inserted. Please ensure the component URL is correct.");
 						progress.close();
 					} else {
 						var data = JSON.parse(matches[1]);
@@ -85,7 +85,7 @@ function showInsertModelWindow(pt) {
 					}
 				},
 				error: function() {
-					mxUtils.alert("Model could not be inserted. Please ensure the morel URL is correct.");
+					mxUtils.alert("Component could not be inserted. Please ensure the component URL is correct.");
 					progress.close();
 				}
 			})
