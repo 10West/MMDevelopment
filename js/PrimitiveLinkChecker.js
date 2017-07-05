@@ -26,13 +26,24 @@ function checkPrimitiveLinks(modelItems) {
 
 
 	function checkmodelItemEdge(item, edge) {
+
+		// Throw error where a Link has no target
+		if (edge.value.nodeName == 'Link' && !edge.target) {
+			throw {
+				msg: getText("A link from the primitive %s is missing target.", "<i>" + clean(item.getAttribute('name')) + "</i>"),
+				primitive: edge,
+				showEditor: false
+			};
+		}
+
+		// Exempt equation inclusion requirement where connection is a Flow from a Stock
+		if (edge.value.nodeName == 'Flow' && item.value.nodeName == 'Stock') return;
+
+		// Get the target object
 		var target = findID(edge.target.id);
 
 		// Ignore connections where current item is the target (validity will be checked from the other end)
 		if (target.id == item.id) return;
-
-		// Exempt equation inclusion requirement where connection is a Flow from a Stock
-		if (edge.value.nodeName == 'Flow' && item.value.nodeName == 'Stock') return;
 
 		var targetEquation;
 		if (target.value.nodeName == 'Stock') {
