@@ -624,6 +624,26 @@ function main() {
 		}]
 	});
 
+
+    var mouseIsDragging = false;
+	$(mxPanel.getEl().dom)
+	.mousedown(function() {
+	    mouseIsDragging = false;
+	})
+	.mousemove(function() {
+	    mouseIsDragging = true;
+	 })
+	.mouseup(function(e) {
+	    var wasDragging = mouseIsDragging;
+	    mouseIsDragging = false;
+	    if (!wasDragging && e.originalEvent.srcElement.parentElement.id == 'mxPanelForModelGraph') {
+	  		var pt = graph.getPointForEvent(e);
+			highlight(createPrimitive("New Variable", "Variable", [pt.x, pt.y], [120, 50]))
+			graph.orderCells(false);
+	    }
+	});
+
+
   $(mxPanel.getEl().dom)
     .on('touchstart tap  ', function(e) { /*touch move touchend*/
 		e.stopPropagation();
