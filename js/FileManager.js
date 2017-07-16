@@ -23,22 +23,24 @@ function setTitle(filename) {
 }
 
 // Get xml data for the current model
-function getModelXML2(baseNodeName) {
+function getModelXML2(baseNodeName, simulate) {
 	if (baseNodeName == null) baseNodeName = 'ModelMakerModel';
 
 	var enc = new mxCodec();
 	var graph_dom=enc.encode(graph.getModel());
 	var graph_dom_xml=graph_dom.innerHTML;
 
-	var resultsData = exportResultsCSV();
-	if (resultsData.simulationError) return resultsData;
+	if (simulate) {
+		var resultsData = exportResultsCSV();
+		if (resultsData.simulationError) return resultsData;
 
-	var resultsSet = '<resultsset results-csv-data="'+resultsData+'"/>';
+		var resultsSet = '<resultsset results-csv-data="'+resultsData+'"/>';
 
-	var rootIdx = graph_dom_xml.lastIndexOf("</root>");
-	if (rootIdx > -1) {
-  		var graph_dom_xml = graph_dom_xml.substr(0, rootIdx) + resultsSet + graph_dom_xml.substr(rootIdx);
-  	}
+		var rootIdx = graph_dom_xml.lastIndexOf("</root>");
+		if (rootIdx > -1) {
+	  		var graph_dom_xml = graph_dom_xml.substr(0, rootIdx) + resultsSet + graph_dom_xml.substr(rootIdx);
+	  	}
+	}
 
 	var xml_data="<"+baseNodeName+">"+graph_dom_xml+"</"+baseNodeName+">";
 	return xml_data;
@@ -77,7 +79,7 @@ var FileManagerWeb = new function() {
 				return;
 			}
 			if (btn == 'ok'){
-				var xml_data = getModelXML2('ModelMakerExport');
+				var xml_data = getModelXML2('ModelMakerExport', true);
 				if (xml_data.simulationError) {
 					self.fileSaveSimError(xml_data.simulationError);
 				} else {
@@ -94,11 +96,7 @@ var FileManagerWeb = new function() {
 			self.saveModelAs();
 		} else {
 			var xml_data = getModelXML2('ModelMakerSave');
-			if (xml_data.simulationError) {
-				self.fileSaveSimError(xml_data.simulationError);
-			} else {
-				self.initiateDownload(model_name,xml_data);
-			}
+			self.initiateDownload(model_name,xml_data);
 		}
 	};
 
@@ -109,11 +107,7 @@ var FileManagerWeb = new function() {
 			}
 			if (btn == 'ok'){
 				var xml_data = getModelXML2('ModelMakerSave');
-				if (xml_data.simulationError) {
-					self.fileSaveSimError(xml_data.simulationError);
-				} else {
-					self.initiateDownload(model_name,xml_data);
-				}
+				self.initiateDownload(model_name,xml_data);
 			}
 		});
 	};
