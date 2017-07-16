@@ -2497,7 +2497,7 @@ function showContextMenu(node, e) {
 					glyph: 0xf0ed,
 					text: getText("Insert ModelMaker Component"),
 					handler: function() {
-						showInsertModelWindow(graph.getPointForEvent(e));
+						showInsertModelFileWindow(graph.getPointForEvent(e));
 					}
 				},
 				'-', {

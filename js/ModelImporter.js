@@ -9,7 +9,6 @@ terms of the Insight Maker Public License (https://InsightMaker.com/impl).
 */
 
 
-
 function showInsertModelWindow(pt) {
 	Ext.Msg.prompt('Insert ModelMaker Component', 'Enter the URL for the ModelMaker component you wish to insert (e.g. <i>' + base_path + '/model/1234</i>). This model will be inserted as a component into your current model.', function(btn, url) {
 		if (btn == 'ok') {
@@ -95,6 +94,18 @@ function showInsertModelWindow(pt) {
 
 
 
+function showInsertModelFileWindow(pt) {
+	openFile({
+		read: "text",
+		multiple: false,
+		onCompleted: function(result) {
+			insertMXGraph(result, pt);
+		}
+	});
+}
+
+
+
 function importMXGraph(txt) {
 	graph_source_data = txt.replace(/InsightMakerModel/g, "mxGraphModel");
 	graph_source_data = graph_source_data.replace(/ModelMakerModel/g, "mxGraphModel");
@@ -104,6 +115,58 @@ function importMXGraph(txt) {
 	$(doc).find('resultsset').remove();
 	var dec = new mxCodec(doc);
 	dec.decode(doc.documentElement, graph.getModel());
+	clearPrimitiveCache();
+	setAllConnectable();
+}
+
+function insertMXGraph(txt, pt) {
+	var title = txt.name;
+	var description = '';
+
+	var data = txt.contents;
+	var graph_source_data = data.replace(/InsightMakerModel/g, "mxGraphModel");
+	graph_source_data = graph_source_data.replace(/ModelMakerModel/g, "mxGraphModel");
+	graph_source_data = graph_source_data.replace(/ModelMakerExport/g, "mxGraphModel");
+	graph_source_data = graph_source_data.replace(/ModelMakerSave/g, "mxGraphModel");
+
+	var doc = mxUtils.parseXml(graph_source_data);
+	$(doc).find('resultsset').remove();
+
+	var dec = new mxCodec(doc);
+	var model = dec.decode(doc.documentElement);
+	var cells = model.cells;
+
+
+	graph.getModel().beginUpdate();
+
+	var folder = createPrimitive(title, "Folder", [pt.x, pt.y], [100, 100]);
+
+	cells = cells[1].children;
+
+	cells = excludeType(cells, "Setting");
+	cells = excludeType(cells, "Display");
+
+	var getEdgeValidationError = graph.getEdgeValidationError;
+	graph.getEdgeValidationError = function(){
+		return mxGraph.prototype.getEdgeValidationError.apply(this, arguments);
+	};
+	graph.importCells(cells, 0, 0, folder);
+	graph.getEdgeValidationError = getEdgeValidationError;
+
+	setImage(folder, "Plugin");
+	setNote(folder, description);
+
+	var geo = folder.geometry;
+	geo.alternateBounds = new mxRectangle(0, 0, 128, 128);
+	graph.getModel().setGeometry(folder, geo);
+
+	collapseFolder(folder);
+	folder.setAttribute("LabelPosition", "Bottom");
+	setLabelPosition(folder);
+
+	graph.getModel().endUpdate();
+
+
 	clearPrimitiveCache();
 	setAllConnectable();
 }
