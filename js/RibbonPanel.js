@@ -1283,6 +1283,7 @@ var RibbonPanel = function(graph, mainPanel, configPanel) {
 					glyph: 0xf01d,
 					tooltip: getText('Run') + ' ' + cmd("Enter"),
 					handler: function(me, evt) {
+						FileManagerWeb.saveModel();
 						runModel();
 					},
 					scope: this
