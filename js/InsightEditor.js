@@ -625,15 +625,16 @@ function main() {
 	});
 
 
+	// Insert new variable on background click
     var mouseIsDragging = false;
 	$(mxPanel.getEl().dom)
-	.mousedown(function() {
+	.on('mousedown', function() {
 	    mouseIsDragging = false;
+	    $(this).on('mousemove', function(e) {
+		    if (e.originalEvent.movementX > 2 || e.originalEvent.movementY > 2) mouseIsDragging = true;
+		})
 	})
-	.mousemove(function() {
-	    mouseIsDragging = true;
-	 })
-	.mouseup(function(e) {
+	.on('mouseup', function(e) {
 	    var wasDragging = mouseIsDragging;
 	    mouseIsDragging = false;
 	    if (!wasDragging && e.originalEvent.srcElement.parentElement.id == 'mxPanelForModelGraph') {
@@ -644,7 +645,7 @@ function main() {
 	});
 
 
-  $(mxPanel.getEl().dom)
+  	$(mxPanel.getEl().dom)
     .on('touchstart tap  ', function(e) { /*touch move touchend*/
 		e.stopPropagation();
 		if(document.activeElement && document.activeElement.blur){
