@@ -493,6 +493,7 @@ function strictEquals(a,b){
 }
 
 function createTree(input){
+	// ANTLR3 code
 	// var cstream = new org.antlr.runtime.ANTLRStringStream(input.replace(/\\n/g,"\n"));
 	// var lexer = new FormulaLexer(cstream);
 	// var tstream = new org.antlr.runtime.CommonTokenStream(lexer);
@@ -500,17 +501,18 @@ function createTree(input){
 	// var parsedTree = parser.lines();
 	// var root = convertToObject(parsedTree.tree, parser);
 
-	// Replaced ANTLR3 code with new ANTLR4 code
+	// ANTLR4 code (Replaces ANTLR3 code above)
     var cstream = new window.antlr4.InputStream(input.replace(/\\n/g,"\n"));
     var lexer = new window.FormulaLexer.FormulaLexer(cstream);
     var tstream = new window.antlr4.CommonTokenStream(lexer);
     var parser = new window.FormulaParser.FormulaParser(tstream);
     parser.buildParseTrees = true;
 	var parsedTree = parser.lines();
-	var root = convertToObject(parsedTree, parser);
+	var root = ANTLR4ConvertToObject(parsedTree, parser);
 
 	if (isLocal()) {
-		// console.log(root);
+		console.log(parsedTree);
+		console.log(root);
 	}
 	return root;
 }
@@ -607,23 +609,54 @@ var TreeNode = function(text, typeName, line){
 	this.children = [];
 };
 
+// Original ANTLR3 convertToObject function (replaced below)
 function convertToObject(node, parser) {
-	var t = node.stop;
-	var current = new TreeNode(t.text, parser.symbolicNames[t.type], t.line);
+	var t = node.getToken();
+	var current = new TreeNode( t.getText(), parser.getTokenNames()[t.getType()], t.line);
 	//Add children
 	/*console.log("--")
 	console.log(t);
 	console.log(current);*/
 
-	if (node.children && node.children.length > 0) {
-		var children = node.children;
+	if (node.getChildCount() > 0) {
+		var children = node.getChildren();
 		for (var i=0; i<children.length; i++) {
-			if (children[i].stop) {
-				current.children.push(convertToObject(children[i], parser));
+			current.children.push(convertToObject(children[i], parser));
 
-				if((! current.line) && current.children[current.children.length-1].line){
-					current.line = current.children[current.children.length-1].line;
-				}
+			if((! current.line) && current.children[current.children.length-1].line){
+				current.line = current.children[current.children.length-1].line;
+			}
+		}
+	}
+
+	return current;
+}
+function ANTLR4ConvertToObject(node, parser) {
+	var current;
+	var nodeConstName = node.constructor.name;
+
+	if (nodeConstName === 'TerminalNodeImpl') {
+		var t = node.symbol;
+		if (t.text !== "<EOF>" && parser.literalNames.indexOf("'"+t.text+"'") === -1) {
+			var typeName = parser.symbolicNames[t.type];
+			if (!typeName) typeName = t.text;
+			current = new TreeNode(t.text, typeName.toUpperCase(), t.line);
+		}
+	} else {
+		var currentText = nodeConstName.substring(0, nodeConstName.length - 7).toUpperCase();
+		current = new TreeNode(currentText, currentText, node.start.line);
+	}
+
+	if (!!current) {
+		if (node.children && node.children.length > 0) {
+			var children = node.children;
+			for (var i=0; i<children.length; i++) {
+				var child = ANTLR4ConvertToObject(children[i], parser);
+				if (!!child) current.children.push(child);
+			}
+
+			if ((! current.line) && current.children[current.children.length-1].line){
+				current.line = current.children[current.children.length-1].line;
 			}
 		}
 	}
@@ -1180,7 +1213,7 @@ funcEvalMap["INNER"] = function(node, scope) {
 
 	var base = evaluateNode(node.children[0], scope);
 
-	if(node.children.length==2 & node.children[1].typeName=="FUNCALL"){
+	if(node.children.length==2 && node.children[1].typeName=="FUNCALL"){
 		return callFunction(base, node.children[1], scope);
 	}
 
@@ -2001,6 +2034,8 @@ function evaluateNode(node, scope) {
 	if(node instanceof TreeNode){
 		evaluatingLine = node.line || evaluatingLine;
 
+		if (!funcEvalMap[node.typeName]) return funcEvalMap["_GENERIC"](node, scope);
+
 		return funcEvalMap[node.typeName](node, scope);
 	}else if(node instanceof PrimitiveStore){
 		if(node.type == "totalValue"){
@@ -2232,7 +2267,7 @@ function trueValue(q){
 }
 
 function isLocal() {
-	return (document.location.hostname == "localhost" || document.location.hostname == "insightmaker.dev" || document.location.hostname == "calc.dev" );
+	return (document.location.hostname == "localhost" || document.location.hostname == "insightmaker.dev" || document.location.hostname == "calc.dev" ) || (document.location.hostname == "modelmaker.localhost");
 }
 
 function isUndefined(item){
@@ -2282,3 +2317,27 @@ function ObjToVec(obj){
 	return new Vector(vals, keys);
 
 }
+
+
+// Generic funcEvalMap function for ANTLR4 compatibility
+funcEvalMap["_GENERIC"] = function(node, scope) {
+	if(!node.children || node.children.length < 1) return node;
+
+	var response;
+	for(var i=0; i<node.children.length; i++){
+		if(node.children[i].text=="return"){
+			throw {returnVal: true, data: evaluateNode(node.children[i].children[0], scope)};
+		}else{
+			response =  evaluateNode(node.children[i], scope);
+		}
+	}
+	return response;
+};
+
+// Missing entries in ANTLR3 based funcEvalMap: {"T__0", "T__1", "T__2", "T__3", "WS", "NEWLINE", "IFSTATEMENT", "THENSTATEMENT", "ELSESTATEMENT", "FUNCTIONSTATEMENT", "ENDBLOCK", "RETURNSTATEMENT", "NEWSTATEMENT", "LARR", "RARR", "LCURL", "RCURL", "SQUARED", "CUBED", "LBRACKET", "RBRACKET", "COMMENT", "LINE_COMMENT", "COLON", "COMMA", "(", ")", "<-", ".", "[", "]", "EXPRESSION", "LOGICALEXPRESSION", "BOOLEANXOREXPRESSION", "BOOLEANANDEXPRESSION", "EQUALITYEXPRESSION", "RELATIONALEXPRESSION", "ADDITIVEEXPRESSION", "MULTIPLICATIVEEXPRESSION", "ARRAYEXPRESSION", "NEGATIONEXPRESSION", "POWEREXPRESSION", "UNARYEXPRESSION", "INNERPRIMARYEXPRESSION", "SELECTIONEXPRESSION", "PRIMARYEXPRESSION", "VALUE", "NUMBER", "FUNCALL"};
+
+funcEvalMap["ADDITIVEEXPRESSION"] = funcEvalMap["PLUS"];
+funcEvalMap["PLUS"] = funcEvalMap["_GENERIC"];
+
+trimEvalMap["ADDITIVEEXPRESSION"] = trimEvalMap["PLUS"];
+trimEvalMap["PLUS"] = trimEvalMap["POWER"];
