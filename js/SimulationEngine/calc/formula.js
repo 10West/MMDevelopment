@@ -517,7 +517,11 @@ function createTree(input){
 	return root;
 }
 function trimTree(root, primitiveBank){
-	return trimNode(root, primitiveBank);
+	if (isLocal()) console.log(root);
+	var trimmedTree = trimNode(root, primitiveBank);
+	if (isLocal()) console.log(trimmedTree);
+	return trimmedTree;
+	// return trimNode(root, primitiveBank);
 }
 function evaluateTree(root, varBank){
 	evaluatingLine = undefined;
@@ -667,6 +671,7 @@ function ANTLR4ConvertToObject(node, parser) {
 
 var funcEvalMap = new Object();
 var evaluatingLine = null;
+
 
 funcEvalMap["LINES"] = function(node, scope) {
 	if(node.children.length==0){
@@ -2053,7 +2058,6 @@ function evaluateNode(node, scope) {
 
 var trimEvalMap = new Object();
 
-
 trimEvalMap["POWER"] = function(node, primitives) {
 	if(node.children.length == 1){
 		return trimNode(node.children[0], primitives);
@@ -2075,7 +2079,7 @@ trimEvalMap["INNER"] = function(node, primitives) {
 		}
 		return n;
 	}
-};;
+};
 trimEvalMap["RANGE"] = trimEvalMap["POWER"];
 trimEvalMap["TRUE"] = function(node) {
 	return true;
@@ -2319,6 +2323,39 @@ function ObjToVec(obj){
 }
 
 
+// Generic trimEvalMap function for ANTLR4 compatibility
+trimEvalMap["_GENERIC"] = function(node, primitives) {
+	if(node.children.length == 1){
+		return trimNode(node.children[0], primitives);
+	}else{
+		var n = new TreeNode(node.origText, node.typeName, node.line);
+		for(var i = 0; i < node.children.length; i++){
+			n.children.push(trimNode(node.children[i], primitives));
+		}
+		return n;
+	}
+};
+
+trimEvalMap["EXPRESSION"] = trimEvalMap["_GENERIC"];
+trimEvalMap["LOGICALEXPRESSION"] = trimEvalMap["_GENERIC"];
+trimEvalMap["BOOLEANXOREXPRESSION"] = trimEvalMap["_GENERIC"];
+trimEvalMap["BOOLEANANDEXPRESSION"] = trimEvalMap["_GENERIC"];
+trimEvalMap["EQUALITYEXPRESSION"] = trimEvalMap["_GENERIC"];
+trimEvalMap["RELATIONALEXPRESSION"] = trimEvalMap["_GENERIC"];
+trimEvalMap["ADDITIVEEXPRESSION"] = trimEvalMap["_GENERIC"];
+trimEvalMap["MULTIPLICATIVEEXPRESSION"] = trimEvalMap["_GENERIC"];
+trimEvalMap["ARRAYEXPRESSION"] = trimEvalMap["_GENERIC"];
+trimEvalMap["NEGATIONEXPRESSION"] = trimEvalMap["_GENERIC"];
+trimEvalMap["POWEREXPRESSION"] = trimEvalMap["_GENERIC"];
+trimEvalMap["UNARYEXPRESSION"] = trimEvalMap["_GENERIC"];
+trimEvalMap["INNERPRIMARYEXPRESSION"] = trimEvalMap["_GENERIC"];
+trimEvalMap["SELECTIONEXPRESSION"] = trimEvalMap["_GENERIC"];
+trimEvalMap["PRIMARYEXPRESSION"] = trimEvalMap["_GENERIC"];
+trimEvalMap["VALUE"] = trimEvalMap["_GENERIC"];
+trimEvalMap["NUMBER"] = trimEvalMap["_GENERIC"];
+// trimEvalMap["FUNCALL"] = trimEvalMap["_GENERIC"];
+
+
 // Generic funcEvalMap function for ANTLR4 compatibility
 funcEvalMap["_GENERIC"] = function(node, scope) {
 	if(!node.children || node.children.length < 1) return node;
@@ -2328,16 +2365,14 @@ funcEvalMap["_GENERIC"] = function(node, scope) {
 		if(node.children[i].text=="return"){
 			throw {returnVal: true, data: evaluateNode(node.children[i].children[0], scope)};
 		}else{
-			response =  evaluateNode(node.children[i], scope);
+			response = evaluateNode(node.children[i], scope);
 		}
 	}
 	return response;
 };
 
-// Missing entries in ANTLR3 based funcEvalMap: {"T__0", "T__1", "T__2", "T__3", "WS", "NEWLINE", "IFSTATEMENT", "THENSTATEMENT", "ELSESTATEMENT", "FUNCTIONSTATEMENT", "ENDBLOCK", "RETURNSTATEMENT", "NEWSTATEMENT", "LARR", "RARR", "LCURL", "RCURL", "SQUARED", "CUBED", "LBRACKET", "RBRACKET", "COMMENT", "LINE_COMMENT", "COLON", "COMMA", "(", ")", "<-", ".", "[", "]", "EXPRESSION", "LOGICALEXPRESSION", "BOOLEANXOREXPRESSION", "BOOLEANANDEXPRESSION", "EQUALITYEXPRESSION", "RELATIONALEXPRESSION", "ADDITIVEEXPRESSION", "MULTIPLICATIVEEXPRESSION", "ARRAYEXPRESSION", "NEGATIONEXPRESSION", "POWEREXPRESSION", "UNARYEXPRESSION", "INNERPRIMARYEXPRESSION", "SELECTIONEXPRESSION", "PRIMARYEXPRESSION", "VALUE", "NUMBER", "FUNCALL"};
-
+// Remapping diffferently named ANTLR4 function names to existing funcEvalMap entries
+funcEvalMap["SELECTIONEXPRESSION"] = funcEvalMap["INNER"];
 funcEvalMap["ADDITIVEEXPRESSION"] = funcEvalMap["PLUS"];
-funcEvalMap["PLUS"] = funcEvalMap["_GENERIC"];
-
-trimEvalMap["ADDITIVEEXPRESSION"] = trimEvalMap["PLUS"];
-trimEvalMap["PLUS"] = trimEvalMap["POWER"];
+funcEvalMap["MULTIPLICATIVEEXPRESSION"] = funcEvalMap["MULT"];
+funcEvalMap["NEGATIONEXPRESSION"] = funcEvalMap["NEGATE"];
