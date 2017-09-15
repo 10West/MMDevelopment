@@ -493,24 +493,25 @@ function strictEquals(a,b){
 }
 
 function createTree(input){
-	// var cstream = new org.antlr.runtime.ANTLRStringStream(input.replace(/\\n/g,"\n"));
-	// var lexer = new FormulaLexer(cstream);
-	// var tstream = new org.antlr.runtime.CommonTokenStream(lexer);
-	// var parser = new FormulaParser(tstream);
-	// var parsedTree = parser.lines();
-	// var root = convertToObject(parsedTree.tree, parser);
+	var cstream = new org.antlr.runtime.ANTLRStringStream(input.replace(/\\n/g,"\n"));
+	var lexer = new FormulaLexer(cstream);
+	var tstream = new org.antlr.runtime.CommonTokenStream(lexer);
+	var parser = new FormulaParser(tstream);
+	var parsedTree = parser.lines();
+	var root = convertToObject(parsedTree.tree, parser);
 
 	// Replaced ANTLR3 code with new ANTLR4 code
-    var cstream = new window.antlr4.InputStream(input.replace(/\\n/g,"\n"));
-    var lexer = new window.FormulaLexer.FormulaLexer(cstream);
-    var tstream = new window.antlr4.CommonTokenStream(lexer);
-    var parser = new window.FormulaParser.FormulaParser(tstream);
-    parser.buildParseTrees = true;
-	var parsedTree = parser.lines();
-	var root = convertToObject(parsedTree, parser);
+ //    var cstream = new window.antlr4.InputStream(input.replace(/\\n/g,"\n"));
+ //    var lexer = new window.FormulaLexer.FormulaLexer(cstream);
+ //    var tstream = new window.antlr4.CommonTokenStream(lexer);
+ //    var parser = new window.FormulaParser.FormulaParser(tstream);
+ //    parser.buildParseTrees = true;
+	// var parsedTree = parser.lines();
+	// var root = convertToObject(parsedTree, parser);
 
 	if (isLocal()) {
-		// console.log(root);
+		console.log(parsedTree);
+		console.log(root);
 	}
 	return root;
 }
@@ -608,22 +609,20 @@ var TreeNode = function(text, typeName, line){
 };
 
 function convertToObject(node, parser) {
-	var t = node.stop;
-	var current = new TreeNode(t.text, parser.symbolicNames[t.type], t.line);
+	var t = node.getToken();
+	var current = new TreeNode( t.getText(), parser.getTokenNames()[t.getType()], t.line);
 	//Add children
 	/*console.log("--")
 	console.log(t);
 	console.log(current);*/
 
-	if (node.children && node.children.length > 0) {
-		var children = node.children;
+	if (node.getChildCount() > 0) {
+		var children = node.getChildren();
 		for (var i=0; i<children.length; i++) {
-			if (children[i].stop) {
-				current.children.push(convertToObject(children[i], parser));
+			current.children.push(convertToObject(children[i], parser));
 
-				if((! current.line) && current.children[current.children.length-1].line){
-					current.line = current.children[current.children.length-1].line;
-				}
+			if((! current.line) && current.children[current.children.length-1].line){
+				current.line = current.children[current.children.length-1].line;
 			}
 		}
 	}

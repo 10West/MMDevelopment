@@ -100,7 +100,7 @@ function callAPI(e) {
 }
 
 function isLocal() {
-	return (document.location.hostname == "localhost") || (document.location.hostname == "insightmaker.dev");
+	return (document.location.hostname == "localhost") || (document.location.hostname == "insightmaker.dev") || (document.location.hostname == "modelmaker.localhost");
 }
 
 mxGraph.prototype.stopEditing = function(a) {
