@@ -64,7 +64,7 @@ function showTimeSettings(config)
 				checked: config.enabled,
 				listeners: {
 					change: function(combo, newValue, oldValue){
-						Ext.getCmp("sSolutionAlgo").setDisabled(! newValue);
+						// Ext.getCmp("sSolutionAlgo").setDisabled(! newValue);
 						Ext.getCmp("stimestep").setDisabled(!newValue);
 					}
 				}
@@ -208,7 +208,7 @@ function showTimeSettings(config)
 							JSON.stringify({
 								enabled: Ext.getCmp('sEnabled').getValue(),
 								timeStep: Ext.getCmp('stimestep').getValue().toString(),
-								algorithm: Ext.getCmp('sSolutionAlgo').getValue()
+								// algorithm: Ext.getCmp('sSolutionAlgo').getValue()
 							})
 						);
 	                    graph.getModel().execute(edit);
