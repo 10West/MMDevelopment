@@ -110,6 +110,7 @@ function importMXGraph(txt) {
 	graph_source_data = txt.replace(/InsightMakerModel/g, "mxGraphModel");
 	graph_source_data = graph_source_data.replace(/ModelMakerModel/g, "mxGraphModel");
 	graph_source_data = graph_source_data.replace(/ModelMakerExport/g, "mxGraphModel");
+	graph_source_data = graph_source_data.replace(/ModelMakerSaveAs/g, "mxGraphModel");
 	graph_source_data = graph_source_data.replace(/ModelMakerSave/g, "mxGraphModel");
 	var doc = mxUtils.parseXml(graph_source_data);
 	$(doc).find('resultsset').remove();

@@ -106,7 +106,7 @@ var FileManagerWeb = new function() {
 				return;
 			}
 			if (btn == 'ok'){
-				var xml_data = getModelXML2('ModelMakerSave');
+				var xml_data = getModelXML2('ModelMakerSaveAs');
 				self.initiateDownload(model_name,xml_data);
 			}
 		});
